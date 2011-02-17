@@ -18,7 +18,6 @@ Patch0: chromium-9.0.597.94-skip-builder-tests.patch
 Provides: %{crname}
 Conflicts: chromium-browser-unstable
 Conflicts: chromium-browser-stable
-Obsoletes: chromium-browser < 1:9.0.597.94
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildRequires: bison, flex, gtk2-devel, atk-devel, libexpat-devel, gperf
 BuildRequires: libnspr-devel, libnss-devel, libalsa-devel
