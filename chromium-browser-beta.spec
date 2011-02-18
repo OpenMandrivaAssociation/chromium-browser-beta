@@ -1,11 +1,11 @@
 %define channel beta
 %define crname chromium-browser
 %define _crdir %{_libdir}/%{crname}
-%define basever 9.0.597.94
+%define basever 10.0.648.45
 %define patchver() (xz -dc %{_sourcedir}/patch-%1-%2.diff.xz|patch -p1)
 
 Name: chromium-browser-beta
-Version: 9.0.597.98
+Version: 10.0.648.82
 Release: %mkrel 1
 Summary: A fast webkit-based web browser
 Group: Networking/WWW
@@ -13,8 +13,9 @@ License: BSD, LGPL
 Source0: chromium-%{basever}.tar.xz
 Source1: chromium-wrapper
 Source2: chromium-browser.desktop
-Source1000: patch-9.0.597.94-9.0.597.98.diff.xz
-Patch0: chromium-9.0.597.94-skip-builder-tests.patch
+Source1000: patch-10.0.648.45-10.0.648.82.diff.xz
+Patch0: chromium-10.0.648.45-skip-builder-tests.patch
+Patch1: chromium-10.0.648.45-webkit-svn-revision.patch
 Provides: %{crname}
 Conflicts: chromium-browser-unstable
 Conflicts: chromium-browser-stable
@@ -46,9 +47,10 @@ your profile before changing channels.
 
 %prep
 %setup -q -n chromium-%{basever}
-%patchver 9.0.597.94 9.0.597.98
+%patchver 10.0.648.45 10.0.648.82
 
 %patch0 -p1 -b .skip-builder-tests
+%patch1 -p1 -b .webkit-svn-revision
 
 echo "%{channel}" > build/LASTCHANGE.in
 
