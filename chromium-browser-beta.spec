@@ -6,7 +6,7 @@
 
 Name: chromium-browser-beta
 Version: 10.0.648.114
-Release: %mkrel 2
+Release: %mkrel 3
 Summary: A fast webkit-based web browser
 Group: Networking/WWW
 License: BSD, LGPL
