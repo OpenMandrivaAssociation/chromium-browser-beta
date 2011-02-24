@@ -5,7 +5,7 @@
 %define patchver() (xz -dc %{_sourcedir}/patch-%1-%2.diff.xz|patch -p1)
 
 Name: chromium-browser-beta
-Version: 10.0.648.82
+Version: 10.0.648.114
 Release: %mkrel 2
 Summary: A fast webkit-based web browser
 Group: Networking/WWW
@@ -14,6 +14,7 @@ Source0: chromium-%{basever}.tar.xz
 Source1: chromium-wrapper
 Source2: chromium-browser.desktop
 Source1000: patch-10.0.648.45-10.0.648.82.diff.xz
+Source1001: patch-10.0.648.82-10.0.648.114.diff.xz
 Patch0: chromium-10.0.648.45-skip-builder-tests.patch
 Patch1: chromium-10.0.648.45-webkit-svn-revision.patch
 Provides: %{crname}
@@ -48,6 +49,8 @@ your profile before changing channels.
 %prep
 %setup -q -n chromium-%{basever}
 %patchver 10.0.648.45 10.0.648.82
+
+%patchver 10.0.648.82 10.0.648.114
 
 %patch0 -p1 -b .skip-builder-tests
 %patch1 -p1 -b .webkit-svn-revision
@@ -95,7 +98,7 @@ install -m 4755 out/Release/chrome_sandbox %{buildroot}%{_crdir}/chrome-sandbox
 install -m 644 out/Release/chrome.1 %{buildroot}%{_mandir}/man1/%{crname}.1
 install -m 644 out/Release/chrome.pak %{buildroot}%{_crdir}/
 install -m 755 out/Release/libffmpegsumo.so %{buildroot}%{_crdir}/
-#install -m 755 out/Release/libppGoogleNaClPluginChrome.so %{buildroot}%{_crdir}/
+install -m 755 out/Release/libppGoogleNaClPluginChrome.so %{buildroot}%{_crdir}/
 install -m 644 out/Release/locales/*.pak %{buildroot}%{_crdir}/locales/
 install -m 644 out/Release/xdg-settings %{buildroot}%{_crdir}/
 install -m 644 out/Release/resources.pak %{buildroot}%{_crdir}/
@@ -126,7 +129,7 @@ rm -rf %{buildroot}
 %{_crdir}/chrome-sandbox
 %{_crdir}/chrome.pak
 %{_crdir}/libffmpegsumo.so
-#%{_crdir}/libppGoogleNaClPluginChrome.so
+%{_crdir}/libppGoogleNaClPluginChrome.so
 %{_crdir}/locales
 %{_crdir}/resources.pak
 %{_crdir}/resources
