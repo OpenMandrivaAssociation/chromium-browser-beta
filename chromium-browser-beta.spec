@@ -5,7 +5,7 @@
 %define patchver() (xz -dc %{_sourcedir}/patch-%1-%2.diff.xz|patch -p1)
 
 Name: chromium-browser-beta
-Version: 10.0.648.126
+Version: 10.0.648.127
 Release: %mkrel 1
 Summary: A fast webkit-based web browser
 Group: Networking/WWW
@@ -53,6 +53,8 @@ your profile before changing channels.
 %patchver 10.0.648.82 10.0.648.114
 
 %patchver 10.0.648.114 10.0.648.126
+
+%patchver 10.0.648.126 10.0.648.127
 
 %patch0 -p1 -b .skip-builder-tests
 %patch1 -p1 -b .webkit-svn-revision
