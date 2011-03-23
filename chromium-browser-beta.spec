@@ -1,11 +1,11 @@
 %define channel beta
 %define crname chromium-browser
 %define _crdir %{_libdir}/%{crname}
-%define basever 10.0.648.45
+%define basever 11.0.696.1
 %define patchver() ([ -f %{_sourcedir}/patch-%1-%2.diff.xz ] || exit 1; xz -dc %{_sourcedir}/patch-%1-%2.diff.xz|patch -p1);
 
 Name: chromium-browser-beta
-Version: 10.0.648.151
+Version: 11.0.696.16
 Release: %mkrel 1
 Summary: A fast webkit-based web browser
 Group: Networking/WWW
@@ -13,14 +13,13 @@ License: BSD, LGPL
 Source0: chromium-%{basever}.tar.xz
 Source1: chromium-wrapper
 Source2: chromium-browser.desktop
-Source1000: patch-10.0.648.45-10.0.648.82.diff.xz
-Source1001: patch-10.0.648.82-10.0.648.114.diff.xz
-Source1002: patch-10.0.648.114-10.0.648.126.diff.xz
-Source1003: patch-10.0.648.126-10.0.648.127.diff.xz
-Source1004: patch-10.0.648.127-10.0.648.133.diff.xz
-Source1005: patch-10.0.648.133-10.0.648.151.diff.xz
-Patch0: chromium-10.0.648.45-skip-builder-tests.patch
-Patch1: chromium-10.0.648.45-webkit-svn-revision.patch
+Source1000: patch-11.0.696.1-11.0.696.3.diff.xz
+Source1001: patch-11.0.696.3-11.0.696.12.diff.xz
+Source1002: chromium-11.0.696.12-theme-chromium.tar.xz
+Source1003: patch-11.0.696.12-11.0.696.14.diff.xz
+Source1004: input_speech_recording.png
+Source1005: patch-11.0.696.14-11.0.696.16.diff.xz
+Patch0: chromium-11.0.672.2-skip-builder-tests.patch
 Provides: %{crname}
 Conflicts: chromium-browser-unstable
 Conflicts: chromium-browser-stable
@@ -53,17 +52,19 @@ your profile before changing channels.
 
 %prep
 %setup -q -n chromium-%{basever}
-%patchver 10.0.648.45 10.0.648.82
-%patchver 10.0.648.82 10.0.648.114
-%patchver 10.0.648.114 10.0.648.126
-%patchver 10.0.648.126 10.0.648.127
-%patchver 10.0.648.127 10.0.648.133
-%patchver 10.0.648.133 10.0.648.151
+%patchver 11.0.696.1 11.0.696.3
+%patchver 11.0.696.3 11.0.696.12
+%patchver 11.0.696.12 11.0.696.14
+%patchver 11.0.696.14 11.0.696.16
 
 %patch0 -p1 -b .skip-builder-tests
-%patch1 -p1 -b .webkit-svn-revision
-
 echo "%{channel}" > build/LASTCHANGE.in
+
+# Update theme
+tar xJf %{_sourcedir}/chromium-11.0.696.12-theme-chromium.tar.xz
+
+# Update other binaries
+cp %{_sourcedir}/input_speech_recording.png webkit/glue/resources/
 
 # Hard code extra version
 FILE=chrome/browser/platform_util_common_linux.cc
