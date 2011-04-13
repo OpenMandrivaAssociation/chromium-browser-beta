@@ -5,7 +5,7 @@
 %define patchver() ([ -f %{_sourcedir}/patch-%1-%2.diff.xz ] || exit 1; xz -dc %{_sourcedir}/patch-%1-%2.diff.xz|patch -p1);
 
 Name: chromium-browser-beta
-Version: 11.0.696.34
+Version: 11.0.696.43
 Release: %mkrel 1
 Summary: A fast webkit-based web browser
 Group: Networking/WWW
@@ -22,6 +22,8 @@ Source1005: patch-11.0.696.14-11.0.696.16.diff.xz
 Source1006: patch-11.0.696.16-11.0.696.25.diff.xz
 Source1007: patch-11.0.696.25-11.0.696.28.diff.xz
 Source1008: patch-11.0.696.28-11.0.696.34.diff.xz
+Source1009: patch-11.0.696.34-11.0.696.43.diff.xz
+Source1010: binary-11.0.696.34-11.0.696.43.tar.xz
 Patch0: chromium-11.0.672.2-skip-builder-tests.patch
 Provides: %{crname}
 Conflicts: chromium-browser-unstable
@@ -62,6 +64,8 @@ your profile before changing channels.
 %patchver 11.0.696.16 11.0.696.25
 %patchver 11.0.696.25 11.0.696.28
 %patchver 11.0.696.28 11.0.696.34
+%patchver 11.0.696.34 11.0.696.43
+tar xvf %{_sourcedir}/binary-11.0.696.34-11.0.696.43.tar.xz
 
 %patch0 -p1 -b .skip-builder-tests
 echo "%{channel}" > build/LASTCHANGE.in
