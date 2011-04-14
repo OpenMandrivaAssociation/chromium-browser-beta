@@ -25,6 +25,7 @@ Source1008: patch-11.0.696.28-11.0.696.34.diff.xz
 Source1009: patch-11.0.696.34-11.0.696.43.diff.xz
 Source1010: binary-11.0.696.34-11.0.696.43.tar.xz
 Patch0: chromium-11.0.672.2-skip-builder-tests.patch
+Patch1: chromium-gcc46.patch
 Provides: %{crname}
 Conflicts: chromium-browser-unstable
 Conflicts: chromium-browser-stable
@@ -68,6 +69,7 @@ your profile before changing channels.
 tar xvf %{_sourcedir}/binary-11.0.696.34-11.0.696.43.tar.xz
 
 %patch0 -p1 -b .skip-builder-tests
+%patch1 -p1 -b .gcc46
 echo "%{channel}" > build/LASTCHANGE.in
 
 # Update theme
