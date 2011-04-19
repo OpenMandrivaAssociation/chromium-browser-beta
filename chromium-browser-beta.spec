@@ -5,7 +5,7 @@
 %define patchver() ([ -f %{_sourcedir}/patch-%1-%2.diff.xz ] || exit 1; xz -dc %{_sourcedir}/patch-%1-%2.diff.xz|patch -p1);
 
 Name: chromium-browser-beta
-Version: 11.0.696.48
+Version: 11.0.696.50
 Release: %mkrel 1
 Summary: A fast webkit-based web browser
 Group: Networking/WWW
@@ -25,6 +25,7 @@ Source1008: patch-11.0.696.28-11.0.696.34.diff.xz
 Source1009: patch-11.0.696.34-11.0.696.43.diff.xz
 Source1010: binary-11.0.696.34-11.0.696.43.tar.xz
 Source1011: patch-11.0.696.43-11.0.696.48.diff.xz
+Source1012: patch-11.0.696.48-11.0.696.50.diff.xz
 Patch0: chromium-11.0.672.2-skip-builder-tests.patch
 Patch1: chromium-gcc46.patch
 Provides: %{crname}
@@ -67,8 +68,9 @@ your profile before changing channels.
 %patchver 11.0.696.25 11.0.696.28
 %patchver 11.0.696.28 11.0.696.34
 %patchver 11.0.696.34 11.0.696.43
-%patchver 11.0.696.43 11.0.696.48
 tar xvf %{_sourcedir}/binary-11.0.696.34-11.0.696.43.tar.xz
+%patchver 11.0.696.43 11.0.696.48
+%patchver 11.0.696.48 11.0.696.50
 
 %patch0 -p1 -b .skip-builder-tests
 %patch1 -p1 -b .gcc46
