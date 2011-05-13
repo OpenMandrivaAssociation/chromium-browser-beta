@@ -5,7 +5,7 @@
 %define patchver() ([ -f %{_sourcedir}/patch-%1-%2.diff.xz ] || exit 1; xz -dc %{_sourcedir}/patch-%1-%2.diff.xz|patch -p1);
 
 Name: chromium-browser-beta
-Version: 12.0.742.30
+Version: 12.0.742.53
 Release: %mkrel 1
 Summary: A fast webkit-based web browser
 Group: Networking/WWW
@@ -13,6 +13,8 @@ License: BSD, LGPL
 Source0: chromium-%{basever}.tar.xz
 Source1: chromium-wrapper
 Source2: chromium-browser.desktop
+Source1000: patch-12.0.742.30-12.0.742.53.diff.xz
+Source1001: binary-12.0.742.30-12.0.742.53.tar.xz
 Patch0: chromium-12.0.742.0-skip-builder-tests.patch
 Patch1: chromium-gcc46.patch
 Patch2: chromium-12.0.742.9-exclude-chromeos-options.patch
@@ -48,6 +50,8 @@ your profile before changing channels.
 
 %prep
 %setup -q -n chromium-%{basever}
+%patchver 12.0.742.30 12.0.742.53
+tar xvf %{_sourcedir}/binary-12.0.742.30-12.0.742.53.tar.xz
 
 %patch0 -p1 -b .skip-builder-tests
 %patch1 -p1 -b .gcc46
