@@ -1,11 +1,11 @@
-%define revision 98877
+%define revision 99685
 %define crname chromium-browser
 %define _crdir %{_libdir}/%{crname}
 %define basever 14.0.794.0
 %define patchver() ([ -f %{_sourcedir}/patch-%1-%2.diff.xz ] || exit 1; xz -dc %{_sourcedir}/patch-%1-%2.diff.xz|patch -p1);
 
 Name: chromium-browser-beta
-Version: 14.0.835.126
+Version: 14.0.835.157
 Release: %mkrel 1
 Summary: A fast webkit-based web browser
 Group: Networking/WWW
@@ -35,6 +35,7 @@ Source1018: patch-14.0.835.94-14.0.835.122.diff.xz
 Source1019: binary-14.0.835.94-14.0.835.122.tar.xz
 Source1020: patch-14.0.835.122-14.0.835.124.diff.xz
 Source1021: patch-14.0.835.124-14.0.835.126.diff.xz
+Source1022: patch-14.0.835.126-14.0.835.157.diff.xz
 Patch0: chromium-14.0.825.0-skip-builder-tests.patch
 Patch1: chromium-14.0.835.0-gcc46.patch
 Patch2: chromium-14.0.835.0-exclude-chromeos-options.patch
@@ -92,6 +93,7 @@ tar xvf %{_sourcedir}/binary-14.0.835.29-14.0.835.35.tar.xz
 tar xvf %{_sourcedir}/binary-14.0.835.94-14.0.835.122.tar.xz
 %patchver 14.0.835.122 14.0.835.124
 %patchver 14.0.835.124 14.0.835.126
+%patchver 14.0.835.126 14.0.835.157
 
 %patch0 -p1 -b .skip-builder-tests
 %patch1 -p1 -b .gcc46
