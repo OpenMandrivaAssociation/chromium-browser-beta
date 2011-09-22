@@ -1,11 +1,11 @@
 %define revision 101896
 %define crname chromium-browser
 %define _crdir %{_libdir}/%{crname}
-%define basever 14.0.794.0
+%define basever 15.0.865.0
 %define patchver() ([ -f %{_sourcedir}/patch-%1-%2.diff.xz ] || exit 1; xz -dc %{_sourcedir}/patch-%1-%2.diff.xz|patch -p1);
 
 Name: chromium-browser-beta
-Version: 14.0.835.163
+Version: 15.0.874.21
 Release: %mkrel 1
 Summary: A fast webkit-based web browser
 Group: Networking/WWW
@@ -13,35 +13,15 @@ License: BSD, LGPL
 Source0: chromium-%{basever}.tar.xz
 Source1: chromium-wrapper
 Source2: chromium-browser.desktop
-Source1000: patch-14.0.794.0-14.0.797.0.diff.xz
-Source1001: binary-14.0.794.0-14.0.797.0.tar.xz
-Source1002: patch-14.0.797.0-14.0.803.0.diff.xz
-Source1003: binary-14.0.797.0-14.0.803.0.tar.xz
-Source1004: patch-14.0.803.0-14.0.825.0.diff.xz
-Source1005: binary-14.0.803.0-14.0.825.0.tar.xz
-Source1006: script-14.0.803.0-14.0.825.0.sh
-Source1007: patch-14.0.825.0-14.0.835.0.diff.xz
-Source1008: binary-14.0.825.0-14.0.835.0.tar.xz
-Source1009: script-14.0.825.0-14.0.835.0.sh
-Source1010: patch-14.0.835.0-14.0.835.8.diff.xz
-Source1011: patch-14.0.835.8-14.0.835.15.diff.xz
-Source1012: patch-14.0.835.15-14.0.835.18.diff.xz
-Source1013: patch-14.0.835.18-14.0.835.29.diff.xz
-Source1014: binary-14.0.835.18-14.0.835.29.tar.xz
-Source1015: patch-14.0.835.29-14.0.835.35.diff.xz
-Source1016: binary-14.0.835.29-14.0.835.35.tar.xz
-Source1017: patch-14.0.835.35-14.0.835.94.diff.xz
-Source1018: patch-14.0.835.94-14.0.835.122.diff.xz
-Source1019: binary-14.0.835.94-14.0.835.122.tar.xz
-Source1020: patch-14.0.835.122-14.0.835.124.diff.xz
-Source1021: patch-14.0.835.124-14.0.835.126.diff.xz
-Source1022: patch-14.0.835.126-14.0.835.157.diff.xz
-Source1023: patch-14.0.835.157-14.0.835.162.diff.xz
-Source1024: patch-14.0.835.162-14.0.835.163.diff.xz
-Source1025: patch-14.0.835.163-14.0.835.186.diff.xz
-Patch0: chromium-14.0.825.0-skip-builder-tests.patch
+Source3: attributed_string_coder.h
+Source1000: patch-15.0.865.0-15.0.874.1.diff.xz
+Source1001: binary-15.0.865.0-15.0.874.1.tar.xz
+Source1002: script-15.0.865.0-15.0.874.1.sh
+Source1003: patch-15.0.874.1-15.0.874.12.diff.xz
+Source1004: patch-15.0.874.12-15.0.874.15.diff.xz
+Source1005: patch-15.0.874.15-15.0.874.21.diff.xz
+Patch0: chromium-15.0.874.1-skip-builder-tests.patch
 Patch1: chromium-14.0.835.0-gcc46.patch
-Patch2: chromium-14.0.835.0-exclude-chromeos-options.patch
 Provides: %{crname}
 Conflicts: chromium-browser-unstable
 Conflicts: chromium-browser-stable
@@ -73,37 +53,18 @@ your profile before changing channels.
 
 %prep
 %setup -q -n chromium-%{basever}
-%patchver 14.0.794.0 14.0.797.0
-tar xvf %{_sourcedir}/binary-14.0.794.0-14.0.797.0.tar.xz
-%patchver 14.0.797.0 14.0.803.0
-tar xvf %{_sourcedir}/binary-14.0.797.0-14.0.803.0.tar.xz
-rm chrome/app/theme/pageinfo_internal.png
-%patchver 14.0.803.0 14.0.825.0
-tar xvf %{_sourcedir}/binary-14.0.803.0-14.0.825.0.tar.xz
-sh -x %{_sourcedir}/script-14.0.803.0-14.0.825.0.sh
-%patchver 14.0.825.0 14.0.835.0
-tar xvf %{_sourcedir}/binary-14.0.825.0-14.0.835.0.tar.xz
-sh -x %{_sourcedir}/script-14.0.825.0-14.0.835.0.sh
-%patchver 14.0.835.0 14.0.835.8
-%patchver 14.0.835.8 14.0.835.15
-%patchver 14.0.835.15 14.0.835.18
-%patchver 14.0.835.18 14.0.835.29
-tar xvf %{_sourcedir}/binary-14.0.835.18-14.0.835.29.tar.xz
-%patchver 14.0.835.29 14.0.835.35
-tar xvf %{_sourcedir}/binary-14.0.835.29-14.0.835.35.tar.xz
-%patchver 14.0.835.35 14.0.835.94
-%patchver 14.0.835.94 14.0.835.122
-tar xvf %{_sourcedir}/binary-14.0.835.94-14.0.835.122.tar.xz
-%patchver 14.0.835.122 14.0.835.124
-%patchver 14.0.835.124 14.0.835.126
-%patchver 14.0.835.126 14.0.835.157
-%patchver 14.0.835.157 14.0.835.162
-%patchver 14.0.835.162 14.0.835.163
-%patchver 14.0.835.163 14.0.835.186
+install -D %{_sourcedir}/attributed_string_coder.h \
+	chrome/common/mac/attributed_string_coder.h
+%patchver 15.0.865.0 15.0.874.1
+tar xvf %{_sourcedir}/binary-15.0.865.0-15.0.874.1.tar.xz
+sh -x %{_sourcedir}/script-15.0.865.0-15.0.874.1.sh
+%patchver 15.0.874.1 15.0.874.12
+rm net/data/ssl/certificates/unosoft_hu_cert.der
+%patchver 15.0.874.12 15.0.874.15
+%patchver 15.0.874.15 15.0.874.21
 
 %patch0 -p1 -b .skip-builder-tests
 %patch1 -p1 -b .gcc46
-%patch2 -p1 -b .exclude-chromeos-options
 echo "%{revision}" > build/LASTCHANGE.in
 
 sed -i -e '/test_support_common/s/^/#/' \
