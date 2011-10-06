@@ -5,7 +5,7 @@
 %define patchver() ([ -f %{_sourcedir}/patch-%1-%2.diff.xz ] || exit 1; xz -dc %{_sourcedir}/patch-%1-%2.diff.xz|patch -p1);
 
 Name: chromium-browser-beta
-Version: 15.0.874.54
+Version: 15.0.874.81
 Release: %mkrel 1
 Summary: A fast webkit-based web browser
 Group: Networking/WWW
