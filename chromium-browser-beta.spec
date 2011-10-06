@@ -1,4 +1,4 @@
-%define revision 103250
+%define revision 103858
 %define crname chromium-browser
 %define _crdir %{_libdir}/%{crname}
 %define basever 15.0.865.0
@@ -21,7 +21,10 @@ Source1003: patch-15.0.874.1-15.0.874.12.diff.xz
 Source1004: patch-15.0.874.12-15.0.874.15.diff.xz
 Source1005: patch-15.0.874.15-15.0.874.21.diff.xz
 Source1006: patch-15.0.874.21-15.0.874.51.diff.xz
-Source1007: patch-15.0.874.51-15.0.874.54.diff.xz
+Source1007: binary-15.0.874.21-15.0.874.51.tar.xz
+Source1008: patch-15.0.874.51-15.0.874.54.diff.xz
+Source1009: patch-15.0.874.54-15.0.874.81.diff.xz
+Source1010: binary-15.0.874.54-15.0.874.81.tar.xz
 Patch0: chromium-15.0.874.1-skip-builder-tests.patch
 Patch1: chromium-14.0.835.0-gcc46.patch
 Provides: %{crname}
@@ -66,7 +69,10 @@ rm net/data/ssl/certificates/unosoft_hu_cert.der
 %patchver 15.0.874.12 15.0.874.15
 %patchver 15.0.874.15 15.0.874.21
 %patchver 15.0.874.21 15.0.874.51
+tar xvf %{_sourcedir}/binary-15.0.874.21-15.0.874.51.tar.xz
 %patchver 15.0.874.51 15.0.874.54
+%patchver 15.0.874.54 15.0.874.81
+tar xvf %{_sourcedir}/binary-15.0.874.54-15.0.874.81.tar.xz
 
 %patch0 -p1 -b .skip-builder-tests
 %patch1 -p1 -b .gcc46
