@@ -1,11 +1,11 @@
-%define revision 104978
+%define revision 106180
 %define crname chromium-browser
 %define _crdir %{_libdir}/%{crname}
 %define basever 15.0.865.0
 %define patchver() ([ -f %{_sourcedir}/patch-%1-%2.diff.xz ] || exit 1; xz -dc %{_sourcedir}/patch-%1-%2.diff.xz|patch -p1);
 
 Name: chromium-browser-beta
-Version: 15.0.874.92
+Version: 15.0.874.100
 Release: %mkrel 1
 Summary: A fast webkit-based web browser
 Group: Networking/WWW
@@ -26,6 +26,7 @@ Source1008: patch-15.0.874.51-15.0.874.54.diff.xz
 Source1009: patch-15.0.874.54-15.0.874.81.diff.xz
 Source1010: binary-15.0.874.54-15.0.874.81.tar.xz
 Source1011: patch-15.0.874.81-15.0.874.92.diff.xz
+Source1012: patch-15.0.874.92-15.0.874.100.diff.xz
 Patch0: chromium-15.0.874.1-skip-builder-tests.patch
 Patch1: chromium-14.0.835.0-gcc46.patch
 Provides: %{crname}
@@ -75,6 +76,7 @@ tar xvf %{_sourcedir}/binary-15.0.874.21-15.0.874.51.tar.xz
 %patchver 15.0.874.54 15.0.874.81
 tar xvf %{_sourcedir}/binary-15.0.874.54-15.0.874.81.tar.xz
 %patchver 15.0.874.81 15.0.874.92
+%patchver 15.0.874.92 15.0.874.100
 
 %patch0 -p1 -b .skip-builder-tests
 %patch1 -p1 -b .gcc46
@@ -141,8 +143,8 @@ install -m 755 out/Release/nacl_helper %{buildroot}%{_crdir}/
 install -m 644 out/Release/nacl_irt_*.nexe %{buildroot}%{_crdir}/
 %endif
 install -m 644 out/Release/locales/*.pak %{buildroot}%{_crdir}/locales/
-install -m 644 out/Release/xdg-mime %{buildroot}%{_crdir}/
-install -m 644 out/Release/xdg-settings %{buildroot}%{_crdir}/
+install -m 755 out/Release/xdg-mime %{buildroot}%{_crdir}/
+install -m 755 out/Release/xdg-settings %{buildroot}%{_crdir}/
 install -m 644 out/Release/resources.pak %{buildroot}%{_crdir}/
 ln -s %{_crdir}/chromium-wrapper %{buildroot}%{_bindir}/%{crname}
 
