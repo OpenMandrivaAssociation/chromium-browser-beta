@@ -24,6 +24,7 @@ Source1007: patch-16.0.912.15-16.0.912.21.diff.xz
 Source1008: patch-16.0.912.21-16.0.912.32.diff.xz
 Source1009: binary-16.0.912.21-16.0.912.32.tar.xz
 Source1010: patch-16.0.912.32-16.0.912.36.diff.xz
+Patch0: chromium-16.0.912.32-include-glib.patch
 Provides: %{crname}
 Conflicts: chromium-browser-unstable
 Conflicts: chromium-browser-stable
@@ -56,6 +57,7 @@ your profile before changing channels.
 
 %prep
 %setup -q -n chromium-%{basever}
+%patch0 -p1 -b .include-glib
 %patchver 16.0.904.0 16.0.912.0
 tar xvf %{_sourcedir}/binary-16.0.904.0-16.0.912.0.tar.xz
 rm ui/resources/aura/chromium-48.png
