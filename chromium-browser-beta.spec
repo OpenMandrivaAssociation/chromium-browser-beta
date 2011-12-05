@@ -1,11 +1,11 @@
-%define revision 109393
+%define revision 112386
 %define crname chromium-browser
 %define _crdir %{_libdir}/%{crname}
 %define basever 16.0.904.0
 %define patchver() ([ -f %{_sourcedir}/patch-%1-%2.diff.xz ] || exit 1; xz -dc %{_sourcedir}/patch-%1-%2.diff.xz|patch -p1);
 
 Name: chromium-browser-beta
-Version: 16.0.912.36
+Version: 16.0.912.59
 Release: %mkrel 1
 Summary: A fast webkit-based web browser
 Group: Networking/WWW
@@ -24,6 +24,8 @@ Source1007: patch-16.0.912.15-16.0.912.21.diff.xz
 Source1008: patch-16.0.912.21-16.0.912.32.diff.xz
 Source1009: binary-16.0.912.21-16.0.912.32.tar.xz
 Source1010: patch-16.0.912.32-16.0.912.36.diff.xz
+Source1011: patch-16.0.912.36-16.0.912.59.diff.xz
+Source1012: binary-16.0.912.36-16.0.912.59.tar.xz
 Patch0: chromium-16.0.912.32-include-glib.patch
 Provides: %{crname}
 Conflicts: chromium-browser-unstable
@@ -70,6 +72,8 @@ tar xvf %{_sourcedir}/binary-16.0.912.12-16.0.912.15.tar.xz
 %patchver 16.0.912.21 16.0.912.32
 tar xvf %{_sourcedir}/binary-16.0.912.21-16.0.912.32.tar.xz
 %patchver 16.0.912.32 16.0.912.36
+%patchver 16.0.912.36 16.0.912.59
+tar xvf %{_sourcedir}/binary-16.0.912.36-16.0.912.59.tar.xz
 
 echo "%{revision}" > build/LASTCHANGE.in
 
