@@ -1,11 +1,11 @@
-%define revision 113337
+%define revision 116225
 %define crname chromium-browser
 %define _crdir %{_libdir}/%{crname}
-%define basever 16.0.904.0
+%define basever 17.0.963.0
 %define patchver() ([ -f %{_sourcedir}/patch-%1-%2.diff.xz ] || exit 1; xz -dc %{_sourcedir}/patch-%1-%2.diff.xz|patch -p1);
 
 Name: chromium-browser-beta
-Version: 16.0.912.63
+Version: 17.0.963.26
 Release: %mkrel 1
 Summary: A fast webkit-based web browser
 Group: Networking/WWW
@@ -13,21 +13,13 @@ License: BSD, LGPL
 Source0: chromium-%{basever}.tar.xz
 Source1: chromium-wrapper
 Source2: chromium-browser.desktop
-Source1000: patch-16.0.904.0-16.0.912.0.diff.xz
-Source1001: binary-16.0.904.0-16.0.912.0.tar.xz
-Source1002: patch-16.0.912.0-16.0.912.4.diff.xz
-Source1003: binary-16.0.912.4-16.0.912.12.tar.xz
-Source1004: patch-16.0.912.4-16.0.912.12.diff.xz
-Source1005: patch-16.0.912.12-16.0.912.15.diff.xz
-Source1006: binary-16.0.912.12-16.0.912.15.tar.xz
-Source1007: patch-16.0.912.15-16.0.912.21.diff.xz
-Source1008: patch-16.0.912.21-16.0.912.32.diff.xz
-Source1009: binary-16.0.912.21-16.0.912.32.tar.xz
-Source1010: patch-16.0.912.32-16.0.912.36.diff.xz
-Source1011: patch-16.0.912.36-16.0.912.59.diff.xz
-Source1012: binary-16.0.912.36-16.0.912.59.tar.xz
-Source1013: patch-16.0.912.59-16.0.912.63.diff.xz
+Source1000: patch-17.0.963.0-17.0.963.2.diff.xz
+Source1001: patch-17.0.963.2-17.0.963.12.diff.xz
+Source1002: binary-17.0.963.2-17.0.963.12.tar.xz
+Source1003: patch-17.0.963.12-17.0.963.26.diff.xz
+Source1004: binary-17.0.963.12-17.0.963.26.tar.xz
 Patch0: chromium-16.0.912.32-include-glib.patch
+Patch1: chromium-17.0.963.12-remove-inline.patch
 Provides: %{crname}
 Conflicts: chromium-browser-unstable
 Conflicts: chromium-browser-stable
@@ -38,7 +30,7 @@ BuildRequires: libglib2-devel, libbzip2-devel, libz-devel, libpng-devel
 BuildRequires: libjpeg-devel, libmesagl-devel, libmesaglu-devel
 BuildRequires: libxscrnsaver-devel, libdbus-glib-devel, cups-devel
 BuildRequires: libgnome-keyring-devel libvpx-devel libxtst-devel
-BuildRequires: libxslt-devel libxml2-devel libxt-devel libpam-devel
+BuildRequires: libxslt-devel libxml2-devel libxt-devel pam-devel
 BuildRequires: libevent-devel libflac-devel libpulseaudio-devel
 BuildRequires: elfutils-devel
 ExclusiveArch: i586 x86_64 armv7l
@@ -61,21 +53,13 @@ your profile before changing channels.
 %prep
 %setup -q -n chromium-%{basever}
 %patch0 -p1 -b .include-glib
-%patchver 16.0.904.0 16.0.912.0
-tar xvf %{_sourcedir}/binary-16.0.904.0-16.0.912.0.tar.xz
-rm ui/resources/aura/chromium-48.png
-%patchver 16.0.912.0 16.0.912.4
-%patchver 16.0.912.4 16.0.912.12
-tar xvf %{_sourcedir}/binary-16.0.912.4-16.0.912.12.tar.xz
-%patchver 16.0.912.12 16.0.912.15
-tar xvf %{_sourcedir}/binary-16.0.912.12-16.0.912.15.tar.xz
-%patchver 16.0.912.15 16.0.912.21
-%patchver 16.0.912.21 16.0.912.32
-tar xvf %{_sourcedir}/binary-16.0.912.21-16.0.912.32.tar.xz
-%patchver 16.0.912.32 16.0.912.36
-%patchver 16.0.912.36 16.0.912.59
-tar xvf %{_sourcedir}/binary-16.0.912.36-16.0.912.59.tar.xz
-%patchver 16.0.912.59 16.0.912.63
+# for 2010.1
+%patch1 -p1 -b .remove-inline
+%patchver 17.0.963.0 17.0.963.2
+%patchver 17.0.963.2 17.0.963.12
+tar xvf %{_sourcedir}/binary-17.0.963.2-17.0.963.12.tar.xz
+%patchver 17.0.963.12 17.0.963.26
+tar xvf %{_sourcedir}/binary-17.0.963.12-17.0.963.26.tar.xz
 
 echo "%{revision}" > build/LASTCHANGE.in
 
@@ -97,7 +81,7 @@ build/gyp_chromium --depth=. \
 	-D use_system_zlib=1 \
 	-D use_system_bzip2=1 \
 	-D use_system_libpng=1 \
-	-D use_system_libjpeg=1 \
+	-D use_system_libjpeg=0 \
 	-D use_system_libevent=1 \
 	-D use_system_flac=1 \
 	-D use_system_vpx=0 \
