@@ -1,11 +1,11 @@
-%define revision 116225
+%define revision 117157
 %define crname chromium-browser
 %define _crdir %{_libdir}/%{crname}
 %define basever 17.0.963.0
 %define patchver() ([ -f %{_sourcedir}/patch-%1-%2.diff.xz ] || exit 1; xz -dc %{_sourcedir}/patch-%1-%2.diff.xz|patch -p1);
 
 Name: chromium-browser-beta
-Version: 17.0.963.26
+Version: 17.0.963.33
 Release: %mkrel 1
 Summary: A fast webkit-based web browser
 Group: Networking/WWW
@@ -18,6 +18,7 @@ Source1001: patch-17.0.963.2-17.0.963.12.diff.xz
 Source1002: binary-17.0.963.2-17.0.963.12.tar.xz
 Source1003: patch-17.0.963.12-17.0.963.26.diff.xz
 Source1004: binary-17.0.963.12-17.0.963.26.tar.xz
+Source1005: patch-17.0.963.26-17.0.963.33.diff.xz
 Patch0: chromium-16.0.912.32-include-glib.patch
 Patch1: chromium-17.0.963.12-remove-inline.patch
 Provides: %{crname}
@@ -60,6 +61,7 @@ your profile before changing channels.
 tar xvf %{_sourcedir}/binary-17.0.963.2-17.0.963.12.tar.xz
 %patchver 17.0.963.12 17.0.963.26
 tar xvf %{_sourcedir}/binary-17.0.963.12-17.0.963.26.tar.xz
+%patchver 17.0.963.26 17.0.963.33
 
 echo "%{revision}" > build/LASTCHANGE.in
 
