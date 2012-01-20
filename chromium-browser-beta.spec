@@ -2,7 +2,8 @@
 %define crname chromium-browser
 %define _crdir %{_libdir}/%{crname}
 %define basever 17.0.963.0
-%define patchver() ([ -f %{_sourcedir}/patch-%1-%2.diff.xz ] || exit 1; xz -dc %{_sourcedir}/patch-%1-%2.diff.xz|patch -p1);
+%define _src %{_topdir}/SOURCES
+%define patchver() ([ -f %{_src}/patch-%1-%2.diff.xz ] || exit 1; xz -dc %{_src}/patch-%1-%2.diff.xz|patch -p1);
 
 Name: chromium-browser-beta
 Version: 17.0.963.33
@@ -58,9 +59,9 @@ your profile before changing channels.
 %patch1 -p1 -b .remove-inline
 %patchver 17.0.963.0 17.0.963.2
 %patchver 17.0.963.2 17.0.963.12
-tar xvf %{_sourcedir}/binary-17.0.963.2-17.0.963.12.tar.xz
+tar xvf %{_src}/binary-17.0.963.2-17.0.963.12.tar.xz
 %patchver 17.0.963.12 17.0.963.26
-tar xvf %{_sourcedir}/binary-17.0.963.12-17.0.963.26.tar.xz
+tar xvf %{_src}/binary-17.0.963.12-17.0.963.26.tar.xz
 %patchver 17.0.963.26 17.0.963.33
 
 echo "%{revision}" > build/LASTCHANGE.in
@@ -111,7 +112,7 @@ mkdir -p %{buildroot}%{_crdir}/locales
 mkdir -p %{buildroot}%{_crdir}/themes
 mkdir -p %{buildroot}%{_crdir}/default_apps
 mkdir -p %{buildroot}%{_mandir}/man1
-install -m 755 %{_sourcedir}/chromium-wrapper %{buildroot}%{_crdir}/
+install -m 755 %{_src}/chromium-wrapper %{buildroot}%{_crdir}/
 install -m 755 out/Release/chrome %{buildroot}%{_crdir}/
 install -m 4755 out/Release/chrome_sandbox %{buildroot}%{_crdir}/chrome-sandbox
 install -m 644 out/Release/chrome.1 %{buildroot}%{_mandir}/man1/%{crname}.1
@@ -135,7 +136,7 @@ cp -r out/Release/resources %{buildroot}%{_crdir}
 
 # desktop file
 mkdir -p %{buildroot}%{_datadir}/applications
-install -m 644 %{_sourcedir}/%{crname}.desktop %{buildroot}%{_datadir}/applications/
+install -m 644 %{_src}/%{crname}.desktop %{buildroot}%{_datadir}/applications/
 
 # icon
 for i in 16 22 24 26 32 48 64 128 256; do
