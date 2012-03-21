@@ -1,12 +1,12 @@
-%define revision 117157
+%define revision 127419
 %define crname chromium-browser
 %define _crdir %{_libdir}/%{crname}
-%define basever 17.0.963.0
+%define basever 18.0.1025.113
 %define _src %{_topdir}/SOURCES
 %define patchver() ([ -f %{_src}/patch-%1-%2.diff.xz ] || exit 1; xz -dc %{_src}/patch-%1-%2.diff.xz|patch -p1);
 
 Name: chromium-browser-beta
-Version: 17.0.963.33
+Version: 18.0.1025.113
 Release: %mkrel 1
 Summary: A fast webkit-based web browser
 Group: Networking/WWW
@@ -14,12 +14,7 @@ License: BSD, LGPL
 Source0: chromium-%{basever}.tar.xz
 Source1: chromium-wrapper
 Source2: chromium-browser.desktop
-Source1000: patch-17.0.963.0-17.0.963.2.diff.xz
-Source1001: patch-17.0.963.2-17.0.963.12.diff.xz
-Source1002: binary-17.0.963.2-17.0.963.12.tar.xz
-Source1003: patch-17.0.963.12-17.0.963.26.diff.xz
-Source1004: binary-17.0.963.12-17.0.963.26.tar.xz
-Source1005: patch-17.0.963.26-17.0.963.33.diff.xz
+#Source1000: patch-17.0.963.0-17.0.963.2.diff.xz
 Patch0: chromium-16.0.912.32-include-glib.patch
 Patch1: chromium-17.0.963.12-remove-inline.patch
 Provides: %{crname}
@@ -57,12 +52,8 @@ your profile before changing channels.
 %patch0 -p1 -b .include-glib
 # for 2010.1
 %patch1 -p1 -b .remove-inline
-%patchver 17.0.963.0 17.0.963.2
-%patchver 17.0.963.2 17.0.963.12
-tar xvf %{_src}/binary-17.0.963.2-17.0.963.12.tar.xz
-%patchver 17.0.963.12 17.0.963.26
-tar xvf %{_src}/binary-17.0.963.12-17.0.963.26.tar.xz
-%patchver 17.0.963.26 17.0.963.33
+#%patchver 17.0.963.2 17.0.963.12
+#tar xvf %{_src}/binary-17.0.963.2-17.0.963.12.tar.xz
 
 echo "%{revision}" > build/LASTCHANGE.in
 
@@ -86,7 +77,7 @@ build/gyp_chromium --depth=. \
 	-D use_system_libpng=1 \
 	-D use_system_libjpeg=0 \
 	-D use_system_libevent=1 \
-	-D use_system_flac=1 \
+	-D use_system_flac=0 \
 	-D use_system_vpx=0 \
 	-D use_system_icu=0 \
 %ifarch i586
