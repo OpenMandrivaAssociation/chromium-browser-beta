@@ -1,4 +1,4 @@
-%define revision 133841
+%define revision 134854
 %define crname chromium-browser
 %define _crdir %{_libdir}/%{crname}
 %define basever 19.0.1077.3
@@ -6,7 +6,7 @@
 %define patchver() ([ -f %{_src}/patch-%1-%2.diff.xz ] || exit 1; xz -dc %{_src}/patch-%1-%2.diff.xz|patch -p1);
 
 Name: chromium-browser-beta
-Version: 19.0.1084.36
+Version: 19.0.1084.41
 Release: %mkrel 1
 Summary: A fast webkit-based web browser
 Group: Networking/WWW
@@ -24,7 +24,8 @@ Source1006: patch-19.0.1084.15-19.0.1084.24.diff.xz
 Source1007: binary-19.0.1084.15-19.0.1084.24.tar.xz
 Source1008: patch-19.0.1084.24-19.0.1084.30.diff.xz
 Source1009: patch-19.0.1084.30-19.0.1084.36.diff.xz
-Patch1: chromium-17.0.963.12-remove-inline.patch
+Source1010: patch-19.0.1084.36-19.0.1084.41.diff.xz
+Source1011: binary-19.0.1084.36-19.0.1084.41.tar.xz
 Provides: %{crname}
 Conflicts: chromium-browser-unstable
 Conflicts: chromium-browser-stable
@@ -57,8 +58,6 @@ your profile before changing channels.
 
 %prep
 %setup -q -n chromium-%{basever}
-# for 2010.1
-#%patch1 -p1 -b .remove-inline
 %patchver 19.0.1077.3 19.0.1081.2
 tar xvf %{_src}/binary-19.0.1077.3-19.0.1081.2.tar.xz
 sh -x %{_src}/script-19.0.1077.3-19.0.1081.2.sh
@@ -69,6 +68,8 @@ sh -x %{_src}/script-19.0.1081.2-19.0.1084.15.sh
 tar xvf %{_src}/binary-19.0.1084.15-19.0.1084.24.tar.xz
 %patchver 19.0.1084.24 19.0.1084.30
 %patchver 19.0.1084.30 19.0.1084.36
+%patchver 19.0.1084.36 19.0.1084.41
+tar xvf %{_src}/binary-19.0.1084.36-19.0.1084.41.tar.xz
 
 echo "%{revision}" > build/LASTCHANGE.in
 
