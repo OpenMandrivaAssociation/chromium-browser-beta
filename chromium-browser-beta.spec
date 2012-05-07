@@ -1,12 +1,12 @@
-%define revision 127419
+%define revision 128359
 %define crname chromium-browser
 %define _crdir %{_libdir}/%{crname}
-%define basever 18.0.1025.113
+%define basever 19.0.1077.3
 %define _src %{_topdir}/SOURCES
 %define patchver() ([ -f %{_src}/patch-%1-%2.diff.xz ] || exit 1; xz -dc %{_src}/patch-%1-%2.diff.xz|patch -p1);
 
 Name: chromium-browser-beta
-Version: 18.0.1025.113
+Version: 19.0.1084.15
 Release: %mkrel 1
 Summary: A fast webkit-based web browser
 Group: Networking/WWW
@@ -14,8 +14,12 @@ License: BSD, LGPL
 Source0: chromium-%{basever}.tar.xz
 Source1: chromium-wrapper
 Source2: chromium-browser.desktop
-#Source1000: patch-17.0.963.0-17.0.963.2.diff.xz
-Patch0: chromium-16.0.912.32-include-glib.patch
+Source1000: patch-19.0.1077.3-19.0.1081.2.diff.xz
+Source1001: binary-19.0.1077.3-19.0.1081.2.tar.xz
+Source1002: script-19.0.1077.3-19.0.1081.2.sh
+Source1003: patch-19.0.1081.2-19.0.1084.15.diff.xz
+Source1004: binary-19.0.1081.2-19.0.1084.15.tar.xz
+Source1005: script-19.0.1081.2-19.0.1084.15.sh
 Patch1: chromium-17.0.963.12-remove-inline.patch
 Provides: %{crname}
 Conflicts: chromium-browser-unstable
@@ -49,16 +53,19 @@ your profile before changing channels.
 
 %prep
 %setup -q -n chromium-%{basever}
-%patch0 -p1 -b .include-glib
 # for 2010.1
-%patch1 -p1 -b .remove-inline
-#%patchver 17.0.963.2 17.0.963.12
-#tar xvf %{_src}/binary-17.0.963.2-17.0.963.12.tar.xz
+#%patch1 -p1 -b .remove-inline
+%patchver 19.0.1077.3 19.0.1081.2
+tar xvf %{_src}/binary-19.0.1077.3-19.0.1081.2.tar.xz
+sh -x %{_src}/script-19.0.1077.3-19.0.1081.2.sh
+%patchver 19.0.1081.2 19.0.1084.15
+tar xvf %{_src}/binary-19.0.1081.2-19.0.1084.15.tar.xz
+sh -x %{_src}/script-19.0.1081.2-19.0.1084.15.sh
 
 echo "%{revision}" > build/LASTCHANGE.in
 
 # Hard code extra version
-FILE=chrome/common/chrome_version_info_linux.cc
+FILE=chrome/common/chrome_version_info_posix.cc
 sed -i.orig -e 's/getenv("CHROME_VERSION_EXTRA")/"%{product_vendor} %{product_version}"/' $FILE
 cmp $FILE $FILE.orig && exit 1
 
@@ -75,7 +82,7 @@ build/gyp_chromium --depth=. \
 	-D use_system_zlib=1 \
 	-D use_system_bzip2=1 \
 	-D use_system_libpng=1 \
-	-D use_system_libjpeg=0 \
+	-D use_system_libjpeg=1 \
 	-D use_system_libevent=1 \
 	-D use_system_flac=0 \
 	-D use_system_vpx=0 \
