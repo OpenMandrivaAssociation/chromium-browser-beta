@@ -1,8 +1,8 @@
 %define revision 134854
 %define crname chromium-browser
 %define _crdir %{_libdir}/%{crname}
-%define basever 19.0.1077.3
 %define _src %{_topdir}/SOURCES
+%define basever 19.0.1077.3
 %define patchver() ([ -f %{_src}/patch-%1-%2.diff.xz ] || exit 1; xz -dc %{_src}/patch-%1-%2.diff.xz|patch -p1);
 
 Name: chromium-browser-beta
