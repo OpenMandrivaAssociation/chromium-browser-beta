@@ -26,6 +26,7 @@ Source1008: script-21.0.1180.4-21.0.1180.11.sh
 Source1009: patch-21.0.1180.11-21.0.1180.15.diff.xz
 Source1010: binary-21.0.1180.11-21.0.1180.15.tar.xz
 Source1011: script-21.0.1180.11-21.0.1180.15.sh
+Patch0: chromium-21.0.1171.0-remove-inline.patch
 Provides: %{crname}
 Conflicts: chromium-browser-unstable
 Conflicts: chromium-browser-stable
