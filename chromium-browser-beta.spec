@@ -1,4 +1,4 @@
-%define revision 144745
+%define revision 146467
 %define crname chromium-browser
 %define _crdir %{_libdir}/%{crname}
 %define _src %{_topdir}/SOURCES
@@ -6,8 +6,8 @@
 %define patchver() ([ -f %{_src}/patch-%1-%2.diff.xz ] || exit 1; xz -dc %{_src}/patch-%1-%2.diff.xz|patch -p1);
 
 Name: chromium-browser-beta
-Version: 21.0.1180.15
-Release: %mkrel 1
+Version: 21.0.1180.41
+Release: %mkrel 2
 Summary: A fast webkit-based web browser
 Group: Networking/WWW
 License: BSD, LGPL
@@ -26,6 +26,9 @@ Source1008: script-21.0.1180.4-21.0.1180.11.sh
 Source1009: patch-21.0.1180.11-21.0.1180.15.diff.xz
 Source1010: binary-21.0.1180.11-21.0.1180.15.tar.xz
 Source1011: script-21.0.1180.11-21.0.1180.15.sh
+Source1012: patch-21.0.1180.15-21.0.1180.41.diff.xz
+Source1013: binary-21.0.1180.15-21.0.1180.41.tar.xz
+Source1014: script-21.0.1180.15-21.0.1180.41.sh
 Patch0: chromium-21.0.1171.0-remove-inline.patch
 Provides: %{crname}
 Conflicts: chromium-browser-unstable
@@ -71,8 +74,10 @@ sh -x %{_src}/script-21.0.1180.0-21.0.1180.4.sh
 tar xvf %{_src}/binary-21.0.1180.4-21.0.1180.11.tar.xz
 sh -x %{_src}/script-21.0.1180.4-21.0.1180.11.sh
 %patchver 21.0.1180.11 21.0.1180.15
-#tar xvf %{_src}/binary-21.0.1180.11-21.0.1180.15.tar.xz
 sh -x %{_src}/script-21.0.1180.11-21.0.1180.15.sh
+%patchver 21.0.1180.15 21.0.1180.41
+tar xvf %{_src}/binary-21.0.1180.15-21.0.1180.41.tar.xz
+sh -x %{_src}/script-21.0.1180.15-21.0.1180.41.sh
 
 echo "%{revision}" > build/LASTCHANGE.in
 
