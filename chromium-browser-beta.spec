@@ -1,4 +1,4 @@
-%define revision 147161
+%define revision 148591
 %define crname chromium-browser
 %define _crdir %{_libdir}/%{crname}
 %define _src %{_topdir}/SOURCES
@@ -30,6 +30,9 @@ Source1012: patch-21.0.1180.15-21.0.1180.41.diff.xz
 Source1013: binary-21.0.1180.15-21.0.1180.41.tar.xz
 Source1014: script-21.0.1180.15-21.0.1180.41.sh
 Source1015: patch-21.0.1180.41-21.0.1180.49.diff.xz
+Source1016: patch-21.0.1180.49-21.0.1180.57.diff.xz
+Source1017: binary-21.0.1180.49-21.0.1180.57.tar.xz
+Source1018: script-21.0.1180.49-21.0.1180.57.sh
 Patch0: chromium-21.0.1171.0-remove-inline.patch
 Provides: %{crname}
 Conflicts: chromium-browser-unstable
@@ -80,6 +83,9 @@ sh -x %{_src}/script-21.0.1180.11-21.0.1180.15.sh
 tar xvf %{_src}/binary-21.0.1180.15-21.0.1180.41.tar.xz
 sh -x %{_src}/script-21.0.1180.15-21.0.1180.41.sh
 %patchver 21.0.1180.41 21.0.1180.49
+%patchver 21.0.1180.49 21.0.1180.57
+tar xvf %{_src}/binary-21.0.1180.49-21.0.1180.57.tar.xz
+sh -x %{_src}/script-21.0.1180.49-21.0.1180.57.sh
 
 echo "%{revision}" > build/LASTCHANGE.in
 
