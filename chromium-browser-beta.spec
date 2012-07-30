@@ -173,9 +173,14 @@ mkdir -p %{buildroot}%{_datadir}/applications
 install -m 644 %{_src}/%{crname}.desktop %{buildroot}%{_datadir}/applications/
 
 # icon
-for i in 16 22 24 26 32 48 64 128 256; do
+for i in 22 24 48 64 128 256; do
 	mkdir -p %{buildroot}%{_iconsdir}/hicolor/${i}x${i}/apps
 	install -m 644 chrome/app/theme/chromium/product_logo_$i.png \
+		%{buildroot}%{_iconsdir}/hicolor/${i}x${i}/apps/%{crname}.png
+done
+for i in 16 26 32; do
+	mkdir -p %{buildroot}%{_iconsdir}/hicolor/${i}x${i}/apps
+	install -m 644 chrome/app/theme/default_100_percent/chromium/product_logo_$i.png \
 		%{buildroot}%{_iconsdir}/hicolor/${i}x${i}/apps/%{crname}.png
 done
 
