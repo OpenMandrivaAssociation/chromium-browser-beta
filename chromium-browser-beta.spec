@@ -6,7 +6,7 @@
 %define patchver() ([ -f %{_src}/patch-%1-%2.diff.xz ] || exit 1; xz -dc %{_src}/patch-%1-%2.diff.xz|patch -p1);
 
 Name: chromium-browser-beta
-Version: 21.0.1180.57
+Version: 21.0.1180.64
 Release: %mkrel 1
 Summary: A fast webkit-based web browser
 Group: Networking/WWW
@@ -33,6 +33,7 @@ Source1015: patch-21.0.1180.41-21.0.1180.49.diff.xz
 Source1016: patch-21.0.1180.49-21.0.1180.57.diff.xz
 Source1017: binary-21.0.1180.49-21.0.1180.57.tar.xz
 Source1018: script-21.0.1180.49-21.0.1180.57.sh
+Source1016: patch-21.0.1180.57-21.0.1180.64.diff.xz
 Patch0: chromium-21.0.1171.0-remove-inline.patch
 Provides: %{crname}
 Conflicts: chromium-browser-unstable
@@ -40,7 +41,7 @@ Conflicts: chromium-browser-stable
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildRequires: bison, flex, gtk2-devel, atk-devel, expat-devel, gperf
 BuildRequires: nspr-devel, nss-devel, libalsa-devel
-BuildRequires: glib2-devel, bzip2-devel, zlib-devel, libpng-devel
+BuildRequires: glib2-devel, bzip2-devel, zlib-devel, png-devel
 BuildRequires: jpeg-devel, mesagl-devel, mesaglu-devel
 BuildRequires: libxscrnsaver-devel, dbus-glib-devel, cups-devel
 BuildRequires: libgnome-keyring-devel libvpx-devel libxtst-devel
@@ -86,6 +87,7 @@ sh -x %{_src}/script-21.0.1180.15-21.0.1180.41.sh
 %patchver 21.0.1180.49 21.0.1180.57
 tar xvf %{_src}/binary-21.0.1180.49-21.0.1180.57.tar.xz
 sh -x %{_src}/script-21.0.1180.49-21.0.1180.57.sh
+%patchver 21.0.1180.57 21.0.1180.64
 
 echo "%{revision}" > build/LASTCHANGE.in
 
