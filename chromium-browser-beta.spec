@@ -35,7 +35,7 @@ Source1017: binary-21.0.1180.49-21.0.1180.57.tar.xz
 Source1018: script-21.0.1180.49-21.0.1180.57.sh
 Source1019: patch-21.0.1180.57-21.0.1180.64.diff.xz
 Source1020: patch-21.0.1180.64-21.0.1180.75.diff.xz
-Source1021: patch-21.0.1180.64-21.0.1180.77.diff.xz
+Source1021: patch-21.0.1180.75-21.0.1180.77.diff.xz
 Source1022: patch-21.0.1180.77-21.0.1180.81.diff.xz
 Patch0: chromium-21.0.1171.0-remove-inline.patch
 Provides: %{crname}
