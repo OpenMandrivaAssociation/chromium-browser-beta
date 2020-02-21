@@ -1,7 +1,7 @@
-diff -up chromium-79.0.3945.130/chrome/browser/about_flags.cc.28~ chromium-79.0.3945.130/chrome/browser/about_flags.cc
---- chromium-79.0.3945.130/chrome/browser/about_flags.cc.28~	2020-01-20 22:25:49.965495744 +0100
-+++ chromium-79.0.3945.130/chrome/browser/about_flags.cc	2020-01-20 22:27:11.012491812 +0100
-@@ -1802,7 +1802,7 @@ const FeatureEntry kFeatureEntries[] = {
+diff -up chromium-81.0.4044.9/chrome/browser/about_flags.cc.23~ chromium-81.0.4044.9/chrome/browser/about_flags.cc
+--- chromium-81.0.4044.9/chrome/browser/about_flags.cc.23~	2020-02-05 22:54:11.000000000 +0100
++++ chromium-81.0.4044.9/chrome/browser/about_flags.cc	2020-02-09 23:15:10.037708142 +0100
+@@ -1892,7 +1892,7 @@ const FeatureEntry kFeatureEntries[] = {
          "disable-accelerated-video-decode",
          flag_descriptions::kAcceleratedVideoDecodeName,
          flag_descriptions::kAcceleratedVideoDecodeDescription,
@@ -10,7 +10,7 @@ diff -up chromium-79.0.3945.130/chrome/browser/about_flags.cc.28~ chromium-79.0.
          SINGLE_DISABLE_VALUE_TYPE(switches::kDisableAcceleratedVideoDecode),
      },
      {
-@@ -2275,12 +2275,12 @@ const FeatureEntry kFeatureEntries[] = {
+@@ -2324,12 +2324,12 @@ const FeatureEntry kFeatureEntries[] = {
       FEATURE_VALUE_TYPE(service_manager::features::kXRSandbox)},
  #endif  // !defined(OS_ANDROID)
  #endif  // ENABLE_VR
@@ -26,10 +26,10 @@ diff -up chromium-79.0.3945.130/chrome/browser/about_flags.cc.28~ chromium-79.0.
      {"system-keyboard-lock", flag_descriptions::kSystemKeyboardLockName,
       flag_descriptions::kSystemKeyboardLockDescription, kOsDesktop,
       FEATURE_VALUE_TYPE(features::kSystemKeyboardLock)},
-diff -up chromium-79.0.3945.130/chrome/browser/flag_descriptions.cc.28~ chromium-79.0.3945.130/chrome/browser/flag_descriptions.cc
---- chromium-79.0.3945.130/chrome/browser/flag_descriptions.cc.28~	2020-01-20 22:25:49.966495744 +0100
-+++ chromium-79.0.3945.130/chrome/browser/flag_descriptions.cc	2020-01-20 22:28:16.079488655 +0100
-@@ -3134,16 +3134,20 @@ const char kMetalDescription[] =
+diff -up chromium-81.0.4044.9/chrome/browser/flag_descriptions.cc.23~ chromium-81.0.4044.9/chrome/browser/flag_descriptions.cc
+--- chromium-81.0.4044.9/chrome/browser/flag_descriptions.cc.23~	2020-02-05 22:54:11.000000000 +0100
++++ chromium-81.0.4044.9/chrome/browser/flag_descriptions.cc	2020-02-09 23:15:10.038708142 +0100
+@@ -2972,16 +2972,20 @@ const char kMetalDescription[] =
  
  #endif
  
@@ -52,10 +52,10 @@ diff -up chromium-79.0.3945.130/chrome/browser/flag_descriptions.cc.28~ chromium
  const char kAggregatedMlAppRankingName[] = "Rank suggested apps with ML.";
  const char kAggregatedMlAppRankingDescription[] =
      "Use the aggregated ML model to rank the suggested apps.";
-diff -up chromium-79.0.3945.130/chrome/browser/flag_descriptions.h.28~ chromium-79.0.3945.130/chrome/browser/flag_descriptions.h
---- chromium-79.0.3945.130/chrome/browser/flag_descriptions.h.28~	2020-01-20 22:25:49.966495744 +0100
-+++ chromium-79.0.3945.130/chrome/browser/flag_descriptions.h	2020-01-20 22:30:34.260481951 +0100
-@@ -1850,13 +1850,17 @@ extern const char kPermissionPromptPersi
+diff -up chromium-81.0.4044.9/chrome/browser/flag_descriptions.h.23~ chromium-81.0.4044.9/chrome/browser/flag_descriptions.h
+--- chromium-81.0.4044.9/chrome/browser/flag_descriptions.h.23~	2020-02-05 22:54:11.000000000 +0100
++++ chromium-81.0.4044.9/chrome/browser/flag_descriptions.h	2020-02-09 23:15:10.039708142 +0100
+@@ -1717,13 +1717,17 @@ extern const char kMetalDescription[];
  
  #endif  // defined(OS_MACOSX)
  
@@ -75,20 +75,16 @@ diff -up chromium-79.0.3945.130/chrome/browser/flag_descriptions.h.28~ chromium-
  extern const char kAggregatedMlAppRankingName[];
  extern const char kAggregatedMlAppRankingDescription[];
  
-diff -up chromium-79.0.3945.130/gpu/config/software_rendering_list.json.28~ chromium-79.0.3945.130/gpu/config/software_rendering_list.json
---- chromium-79.0.3945.130/gpu/config/software_rendering_list.json.28~	2020-01-16 22:51:02.000000000 +0100
-+++ chromium-79.0.3945.130/gpu/config/software_rendering_list.json	2020-01-20 22:25:49.967495744 +0100
-@@ -334,11 +334,12 @@
+diff -up chromium-81.0.4044.9/gpu/config/software_rendering_list.json.23~ chromium-81.0.4044.9/gpu/config/software_rendering_list.json
+--- chromium-81.0.4044.9/gpu/config/software_rendering_list.json.23~	2020-02-09 23:15:10.040708142 +0100
++++ chromium-81.0.4044.9/gpu/config/software_rendering_list.json	2020-02-09 23:25:04.617669208 +0100
+@@ -337,7 +337,8 @@
      },
      {
        "id": 48,
 -      "description": "Accelerated video decode is unavailable on Linux",
 +      "description": "Accelerated VA-API video decode is not supported on NVIDIA platforms",
-       "cr_bugs": [137247],
++      "vendor_id": "0x10de",
+       "cr_bugs": [137247, 1032907],
        "os": {
          "type": "linux"
-       },
-+      "vendor_id": "0x10de",
-       "features": [
-         "accelerated_video_decode"
-       ]

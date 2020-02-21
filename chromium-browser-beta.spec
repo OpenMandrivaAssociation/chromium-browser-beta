@@ -6,6 +6,8 @@
 %endif
 
 %define _disable_ld_no_undefined 1
+# Chromium buildmess uses its own LTO
+%global _disable_lto 1
 
 # eol 'fix' corrupts some .bin files
 %define dont_fix_eol 1
@@ -48,7 +50,7 @@
 Name: 		chromium-browser-%{channel}
 # Working version numbers can be found at
 # http://omahaproxy.appspot.com/
-Version: 	80.0.3987.100
+Version: 	81.0.4044.26
 Release: 	1%{?extrarelsuffix}
 Summary: 	A fast webkit-based web browser
 Group: 		Networking/WWW
@@ -144,8 +146,8 @@ Patch702:	chromium-40-sorenson-spark.patch
 # omv
 Patch1001:	chromium-64-system-curl.patch
 Patch1002:	chromium-69-no-static-libstdc++.patch
-Patch1003:	chromium-80-libstdc++10.patch
-Patch1004:	chromium-80-clang10-libstdc++10.patch
+Patch1003:	chromium-81-clang10.patch
+Patch1004:	chromium-81-compile.patch
 
 # stop so many build warnings
 Patch1006:	chromium-71.0.3578.94-quieten.patch
@@ -336,6 +338,7 @@ python2 build/linux/unbundle/remove_bundled_libraries.py \
 	'third_party/angle/src/third_party/compiler' \
 	'third_party/angle/src/third_party/libXNVCtrl' \
 	'third_party/angle/src/third_party/trace_event' \
+	'third_party/angle/src/third_party/volk' \
 	'third_party/angle/third_party/glslang' \
 	'third_party/angle/third_party/spirv-headers' \
 	'third_party/angle/third_party/spirv-tools' \
@@ -380,8 +383,10 @@ python2 build/linux/unbundle/remove_bundled_libraries.py \
 	'third_party/depot_tools' \
 	'third_party/devscripts' \
 	'third_party/devtools-frontend' \
-	'third_party/devtools-frontend/src/third_party/typescript' \
+	'third_party/devtools-frontend/src/front_end/third_party/fabricjs' \
+	'third_party/devtools-frontend/src/front_end/third_party/wasmparser' \
 	'third_party/devtools-frontend/src/third_party/axe-core' \
+	'third_party/devtools-frontend/src/third_party/typescript' \
 	'third_party/dom_distiller_js' \
 	'third_party/emoji-segmenter' \
 	'third_party/expat' \
@@ -472,7 +477,6 @@ python2 build/linux/unbundle/remove_bundled_libraries.py \
 %endif
 	'third_party/rnnoise' \
 	'third_party/s2cellid' \
-	'third_party/sfntly' \
 	'third_party/simplejson' \
 	'third_party/sinonjs' \
 	'third_party/skia' \
@@ -513,8 +517,8 @@ python2 build/linux/unbundle/remove_bundled_libraries.py \
         'third_party/yasm' \
         'third_party/zlib' \
 	'third_party/zlib/google' \
+	'tools/gn/src/base/third_party/icu' \
 	'tools/grit/third_party/six' \
-	'tools/gn/base/third_party/icu' \
 	'url/third_party/mozilla' \
 	'v8/src/third_party/siphash' \
 	'v8/src/third_party/utf8-decoder' \
@@ -591,6 +595,10 @@ CHROMIUM_CORE_GN_DEFINES+=" target_cpu=\"arm64\""
 CHROMIUM_CORE_GN_DEFINES+=" google_api_key=\"%{google_api_key}\""
 CHROMIUM_CORE_GN_DEFINES+=" google_default_client_id=\"%{google_default_client_id}\""
 CHROMIUM_CORE_GN_DEFINES+=" google_default_client_secret=\"%{google_default_client_secret}\""
+CHROMIUM_CORE_GN_DEFINES+=" thin_lto_enable_optimizations=true use_clang=true use_lld=true use_thin_lto=true"
+CHROMIUM_CORE_GN_DEFINES+=" custom_toolchain=\"//build/toolchain/linux/unbundle:default\""
+CHROMIUM_CORE_GN_DEFINES+=" host_toolchain=\"//build/toolchain/linux/unbundle:default\""
+CHROMIUM_CORE_GN_DEFINES+=" v8_snapshot_toolchain=\"//build/toolchain/linux/unbundle:default\""
 
 CHROMIUM_BROWSER_GN_DEFINES="use_pulseaudio=true icu_use_data_file=true"
 CHROMIUM_BROWSER_GN_DEFINES+=" enable_nacl=false"
@@ -616,6 +624,7 @@ gn_system_libraries="
     libjpeg
     libusb
     libwebp
+    libxml
     libxslt
     snappy
     yasm
@@ -640,6 +649,22 @@ gn_system_libraries+=" libvpx"
 %if %{with system_ffmpeg}
 gn_system_libraries+=" ffmpeg"
 %endif
+
+if echo %{__cc} | grep -q clang; then
+	export CFLAGS="%{optflags} -Qunused-arguments -fPIE -fpie -fPIC"
+	export CXXFLAGS="%{optflags} -Qunused-arguments -fPIE -fpie -fPIC"
+	_lto_cpus="$(getconf _NPROCESSORS_ONLN)"
+	export LDFLAGS="%{ldflags} -Wl,--thinlto-jobs=$_lto_cpus"
+	export AR="llvm-ar"
+	export NM="llvm-nm"
+	export RANLIB="llvm-ranlib"
+else
+	export CFLAGS="%{optflags}"
+	export CXXFLAGS="%{optflags}"
+fi
+export CC=%{__cc}
+export CXX=%{__cxx}
+
 python2 build/linux/unbundle/replace_gn_files.py --system-libraries ${gn_system_libraries}
 
 python2 tools/gn/bootstrap/bootstrap.py --skip-generate-buildfiles

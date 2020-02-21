@@ -1,0 +1,79 @@
+diff -up chromium-81.0.4044.26/media/cdm/supported_cdm_versions.h.omv~ chromium-81.0.4044.26/media/cdm/supported_cdm_versions.h
+--- chromium-81.0.4044.26/media/cdm/supported_cdm_versions.h.omv~	2020-02-21 22:16:45.640175009 +0100
++++ chromium-81.0.4044.26/media/cdm/supported_cdm_versions.h	2020-02-21 22:16:51.817175281 +0100
+@@ -52,7 +52,7 @@ constexpr bool IsSupportedCdmModuleVersi
+ // Returns whether the CDM interface of |version| is supported in the
+ // implementation.
+ constexpr bool IsSupportedCdmInterfaceVersion(int version) {
+-  for (size_t i = 0; i < kSupportedCdmInterfaceVersions.size(); ++i) {
++  for (std::size_t i = 0; i < kSupportedCdmInterfaceVersions.size(); ++i) {
+     if (kSupportedCdmInterfaceVersions[i].version == version)
+       return true;
+   }
+@@ -70,7 +70,7 @@ constexpr bool IsSupportedCdmHostVersion
+ 
+ // Returns whether the CDM interface of |version| is enabled by default.
+ constexpr bool IsCdmInterfaceVersionEnabledByDefault(int version) {
+-  for (size_t i = 0; i < kSupportedCdmInterfaceVersions.size(); ++i) {
++  for (std::size_t i = 0; i < kSupportedCdmInterfaceVersions.size(); ++i) {
+     if (kSupportedCdmInterfaceVersions[i].version == version)
+       return kSupportedCdmInterfaceVersions[i].enabled;
+   }
+diff -up chromium-81.0.4044.26/media/gpu/vaapi/vaapi_picture_tfp.cc.omv~ chromium-81.0.4044.26/media/gpu/vaapi/vaapi_picture_tfp.cc
+--- chromium-81.0.4044.26/media/gpu/vaapi/vaapi_picture_tfp.cc.omv~	2020-02-21 22:27:55.749719348 +0100
++++ chromium-81.0.4044.26/media/gpu/vaapi/vaapi_picture_tfp.cc	2020-02-21 22:35:51.348696274 +0100
+@@ -57,7 +57,7 @@ bool VaapiTFPPicture::Initialize() {
+   if (make_context_current_cb_ && !make_context_current_cb_.Run())
+     return false;
+ 
+-  glx_image_ = new gl::GLImageGLX(size_, GL_RGB);
++  glx_image_ = new gl::GLImageGLX(size_, gfx::BufferFormat::RGBX_8888);
+   if (!glx_image_->Initialize(x_pixmap_)) {
+     // x_pixmap_ will be freed in the destructor.
+     DLOG(ERROR) << "Failed creating a GLX Pixmap for TFP";
+diff -up chromium-81.0.4044.26/media/mojo/services/gpu_mojo_media_client.cc.omv~ chromium-81.0.4044.26/media/mojo/services/gpu_mojo_media_client.cc
+diff -up chromium-81.0.4044.26/third_party/perfetto/include/perfetto/base/task_runner.h.omv~ chromium-81.0.4044.26/third_party/perfetto/include/perfetto/base/task_runner.h
+--- chromium-81.0.4044.26/third_party/perfetto/include/perfetto/base/task_runner.h.omv~	2020-02-21 19:59:19.467811395 +0100
++++ chromium-81.0.4044.26/third_party/perfetto/include/perfetto/base/task_runner.h	2020-02-21 19:59:26.643811711 +0100
+@@ -18,6 +18,7 @@
+ #define INCLUDE_PERFETTO_BASE_TASK_RUNNER_H_
+ 
+ #include <functional>
++#include <cstdint>
+ 
+ #include "perfetto/base/export.h"
+ 
+diff -up chromium-81.0.4044.26/third_party/webrtc/call/rtx_receive_stream.h.omv~ chromium-81.0.4044.26/third_party/webrtc/call/rtx_receive_stream.h
+--- chromium-81.0.4044.26/third_party/webrtc/call/rtx_receive_stream.h.omv~	2020-02-21 21:13:24.896007416 +0100
++++ chromium-81.0.4044.26/third_party/webrtc/call/rtx_receive_stream.h	2020-02-21 21:13:32.049007731 +0100
+@@ -12,6 +12,7 @@
+ #define CALL_RTX_RECEIVE_STREAM_H_
+ 
+ #include <map>
++#include <cstdint>
+ 
+ #include "call/rtp_packet_sink_interface.h"
+ 
+diff -up chromium-81.0.4044.26/third_party/webrtc/modules/audio_processing/aec3/clockdrift_detector.h.omv~ chromium-81.0.4044.26/third_party/webrtc/modules/audio_processing/aec3/clockdrift_detector.h
+--- chromium-81.0.4044.26/third_party/webrtc/modules/audio_processing/aec3/clockdrift_detector.h.omv~	2020-02-21 21:25:18.455038880 +0100
++++ chromium-81.0.4044.26/third_party/webrtc/modules/audio_processing/aec3/clockdrift_detector.h	2020-02-21 21:25:23.648039109 +0100
+@@ -31,7 +31,7 @@ class ClockdriftDetector {
+  private:
+   std::array<int, 3> delay_history_;
+   Level level_;
+-  size_t stability_counter_;
++  std::size_t stability_counter_;
+ };
+ }  // namespace webrtc
+ 
+diff -up chromium-81.0.4044.26/ui/gfx/linux/drm_util_linux.h.omv~ chromium-81.0.4044.26/ui/gfx/linux/drm_util_linux.h
+--- chromium-81.0.4044.26/ui/gfx/linux/drm_util_linux.h.omv~	2020-02-21 19:29:40.493732951 +0100
++++ chromium-81.0.4044.26/ui/gfx/linux/drm_util_linux.h	2020-02-21 19:29:46.970733237 +0100
+@@ -6,6 +6,7 @@
+ #define UI_GFX_LINUX_DRM_UTIL_LINUX_H_
+ 
+ #include "ui/gfx/buffer_types.h"
++#include <cstdint>
+ 
+ namespace ui {
+ 

@@ -1,0 +1,126 @@
+diff -up chromium-80.0.3987.53/base/test/BUILD.gn.omv~ chromium-80.0.3987.53/base/test/BUILD.gn
+--- chromium-80.0.3987.53/base/test/BUILD.gn.omv~	2020-01-21 00:36:16.356116037 +0100
++++ chromium-80.0.3987.53/base/test/BUILD.gn	2020-01-21 00:36:33.714115195 +0100
+@@ -226,8 +226,7 @@ static_library("test_support") {
+     "//testing/gmock",
+     "//testing/gtest",
+     "//third_party/icu:icuuc",
+-    "//third_party/libxml:libxml_utils",
+-    "//third_party/libxml:xml_reader",
++    "//third_party/libxml:system_libxml",
+   ]
+ 
+   if (is_posix || is_fuchsia) {
+@@ -298,8 +297,7 @@ static_library("test_support") {
+     public_deps -= [ "//base:i18n" ]
+     deps -= [
+       "//third_party/icu:icuuc",
+-      "//third_party/libxml:libxml_utils",
+-      "//third_party/libxml:xml_reader",
++      "//third_party/libxml:system_libxml",
+     ]
+   }
+ }
+diff -up chromium-80.0.3987.53/chrome/browser/BUILD.gn.omv~ chromium-80.0.3987.53/chrome/browser/BUILD.gn
+--- chromium-80.0.3987.53/chrome/browser/BUILD.gn.omv~	2020-01-21 00:37:48.048111588 +0100
++++ chromium-80.0.3987.53/chrome/browser/BUILD.gn	2020-01-21 00:37:53.502111324 +0100
+@@ -2220,7 +2220,7 @@ jumbo_static_library("browser") {
+     "//third_party/icu",
+     "//third_party/leveldatabase",
+     "//third_party/libaddressinput",
+-    "//third_party/libxml:xml_writer",
++    "//third_party/libxml:system_libxml",
+     "//third_party/libyuv",
+     "//third_party/metrics_proto",
+     "//third_party/re2",
+diff -up chromium-80.0.3987.53/components/policy/core/common/BUILD.gn.omv~ chromium-80.0.3987.53/components/policy/core/common/BUILD.gn
+--- chromium-80.0.3987.53/components/policy/core/common/BUILD.gn.omv~	2020-01-21 00:36:51.556114329 +0100
++++ chromium-80.0.3987.53/components/policy/core/common/BUILD.gn	2020-01-21 00:37:05.326113661 +0100
+@@ -173,7 +173,7 @@ jumbo_source_set("internal") {
+     "//net",
+     "//services/identity/public/cpp:cpp_types",
+     "//services/network/public/cpp",
+-    "//third_party/libxml:xml_writer",
++    "//third_party/libxml:system_libxml",
+     "//third_party/re2",
+     "//url",
+   ]
+@@ -422,7 +422,7 @@ source_set("unit_tests") {
+     "//services/network:test_support",
+     "//testing/gmock",
+     "//testing/gtest",
+-    "//third_party/libxml:xml_reader",
++    "//third_party/libxml:system_libxml",
+   ]
+ }
+ 
+diff -up chromium-80.0.3987.53/components/wifi/BUILD.gn.omv~ chromium-80.0.3987.53/components/wifi/BUILD.gn
+--- chromium-80.0.3987.53/components/wifi/BUILD.gn.omv~	2020-01-21 00:37:16.767113106 +0100
++++ chromium-80.0.3987.53/components/wifi/BUILD.gn	2020-01-21 00:37:32.265112354 +0100
+@@ -26,8 +26,8 @@ jumbo_component("wifi") {
+   if (is_win) {
+     libs = [ "iphlpapi.lib" ]
+     deps += [
+-      "//third_party/libxml:xml_reader",  # Safe, data come from system.
+-      "//third_party/libxml:xml_writer",
++      "//third_party/libxml:system_libxml",  # Safe, data come from system.
++      "//third_party/libxml:system_libxml",
+     ]
+   }
+ 
+diff -up chromium-80.0.3987.53/services/data_decoder/BUILD.gn.omv~ chromium-80.0.3987.53/services/data_decoder/BUILD.gn
+--- chromium-80.0.3987.53/services/data_decoder/BUILD.gn.omv~	2020-01-21 00:39:16.162107314 +0100
++++ chromium-80.0.3987.53/services/data_decoder/BUILD.gn	2020-01-21 00:39:31.204106584 +0100
+@@ -33,7 +33,7 @@ source_set("lib") {
+     "//mojo/public/cpp/bindings",
+     "//net",
+     "//skia",
+-    "//third_party/libxml:xml_reader",
++    "//third_party/libxml:system_libxml",
+     "//ui/gfx",
+     "//ui/gfx/geometry",
+   ]
+@@ -117,8 +117,7 @@ fuzzer_test("xml_parser_fuzzer") {
+   deps = [
+     ":lib",
+     "//base",
+-    "//third_party/libxml:libxml_utils",
+-    "//third_party/libxml:xml_reader",
++    "//third_party/libxml:system_libxml",
+   ]
+   dict = "//third_party/libxml/fuzz/xml.dict"
+   seed_corpus = "//third_party/libxml/fuzz/seed_corpus"
+diff -up chromium-80.0.3987.53/testing/libfuzzer/fuzzers/BUILD.gn.omv~ chromium-80.0.3987.53/testing/libfuzzer/fuzzers/BUILD.gn
+--- chromium-80.0.3987.53/testing/libfuzzer/fuzzers/BUILD.gn.omv~	2020-01-21 00:38:50.140108576 +0100
++++ chromium-80.0.3987.53/testing/libfuzzer/fuzzers/BUILD.gn	2020-01-21 00:39:05.881107812 +0100
+@@ -70,7 +70,7 @@ fuzzer_test("template_url_parser_fuzzer"
+     "//mojo/core/embedder",
+     "//services/data_decoder/public/cpp",
+     "//services/data_decoder/public/cpp:test_support",
+-    "//third_party/libxml:libxml",
++    "//third_party/libxml:system_libxml",
+   ]
+   dict = "//third_party/libxml/fuzz/xml.dict"
+   libfuzzer_options = [ "max_len=4096" ]
+@@ -137,7 +137,7 @@ fuzzer_test("libxml_xml_read_memory_fuzz
+     "libxml_xml_read_memory_fuzzer.cc",
+   ]
+   deps = [
+-    "//third_party/libxml:libxml",
++    "//third_party/libxml:system_libxml",
+   ]
+   dict = "//third_party/libxml/fuzz/xml.dict"
+   seed_corpus = "//third_party/libxml/fuzz/seed_corpus"
+diff -up chromium-80.0.3987.53/tools/traffic_annotation/auditor/BUILD.gn.omv~ chromium-80.0.3987.53/tools/traffic_annotation/auditor/BUILD.gn
+--- chromium-80.0.3987.53/tools/traffic_annotation/auditor/BUILD.gn.omv~	2020-01-21 00:38:30.795109515 +0100
++++ chromium-80.0.3987.53/tools/traffic_annotation/auditor/BUILD.gn	2020-01-21 00:38:41.250109007 +0100
+@@ -70,8 +70,7 @@ source_set("auditor_sources") {
+     ":traffic_annotation",
+     "//base",
+     "//net/traffic_annotation",
+-    "//third_party/libxml:xml_reader",  # Safe, consumes Chromium-produced file.
+-    "//third_party/libxml:xml_writer",
++    "//third_party/libxml:system_libxml",  # Safe, consumes Chromium-produced file.
+     "//third_party/protobuf:protobuf_full",
+     "//third_party/re2",
+   ]
