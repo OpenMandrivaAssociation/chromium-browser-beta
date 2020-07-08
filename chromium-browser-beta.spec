@@ -39,7 +39,7 @@
 %bcond_without	system_minizip
 # chromium 58 fails with system vpx 1.6.1
 %bcond_without	system_vpx
-%bcond_without	system_re2
+%bcond_with	system_re2
 
 # Always support proprietary codecs
 # or html5 does not work
@@ -51,7 +51,7 @@
 Name: 		chromium-browser-%{channel}
 # Working version numbers can be found at
 # http://omahaproxy.appspot.com/
-Version: 	83.0.4103.23
+Version: 	84.0.4147.68
 Release: 	1%{?extrarelsuffix}
 Summary: 	A fast webkit-based web browser
 Group: 		Networking/WWW
@@ -73,10 +73,6 @@ Patch0:		https://src.fedoraproject.org/rpms/chromium/raw/master/f/chromium-70.0.
 Patch1:		https://src.fedoraproject.org/rpms/chromium/raw/master/f/chromium-68.0.3440.106-master-prefs-path.patch
 # Use gn system files
 Patch2:		https://src.fedoraproject.org/rpms/chromium/raw/master/f/chromium-67.0.3396.62-gn-system.patch
-# Revert https://chromium.googlesource.com/chromium/src/+/b794998819088f76b4cf44c8db6940240c563cf4%5E%21/#F0
-# https://bugs.chromium.org/p/chromium/issues/detail?id=712737
-# https://bugzilla.redhat.com/show_bug.cgi?id=1446851
-Patch3:		https://src.fedoraproject.org/rpms/chromium/raw/master/f/chromium-58.0.3029.96-revert-b794998819088f76b4cf44c8db6940240c563cf4.patch
 # Do not prefix libpng functions
 Patch4:		https://src.fedoraproject.org/rpms/chromium/raw/master/f/chromium-60.0.3112.78-no-libpng-prefix.patch
 # Do not mangle libjpeg
@@ -125,7 +121,6 @@ Patch63:	https://src.fedoraproject.org/rpms/chromium/raw/master/f/chromium-79.0.
 # Apply these patches to work around EPEL8 issues
 #Patch300:	https://src.fedoraproject.org/rpms/chromium/raw/master/f/chromium-76.0.3809.132-rhel8-force-disable-use_gnome_keyring.patch
 
-Patch500:	https://src.fedoraproject.org/rpms/chromium/raw/master/f/chromium-75.0.3770.80-revert-daff6b.patch
 Patch501:	https://src.fedoraproject.org/rpms/chromium/raw/master/f/chromium-75.0.3770.80-SIOCGSTAMP.patch
 
 ### Chromium Tests Patches ###
@@ -149,13 +144,13 @@ Patch1001:	chromium-64-system-curl.patch
 Patch1002:	chromium-69-no-static-libstdc++.patch
 Patch1003:	chromium-83-norar.patch
 #Patch1004:	chromium-80-clang10-libstdc++10.patch
-Patch1005:	chromium-83-compile.patch
 Patch1006:	chromium-81-dont-pretend-vaapi-is-broken.patch
 Patch1007:	chromium-81-enable-gpu-features.patch
 
 # stop so many build warnings
 Patch1008:	chromium-71.0.3578.94-quieten.patch
 Patch1009:	chromium-trace.patch
+Patch1010:	chromium-84-compile.patch
 
 Provides: 	%{crname}
 Obsoletes: 	chromium-browser-unstable < 26.0.1410.51
@@ -173,6 +168,7 @@ BuildRequires:	pkgconfig(re2)
 BuildRequires:	pkgconfig(com_err)
 BuildRequires:	python2dist(json5)
 BuildRequires:	python2-pkg-resources
+BuildRequires:	python2-xcbgen
 BuildRequires: 	alsa-oss-devel
 BuildRequires:	atomic-devel
 BuildRequires:	harfbuzz-devel
@@ -390,6 +386,8 @@ python2 build/linux/unbundle/remove_bundled_libraries.py \
 	'third_party/devtools-frontend' \
 	'third_party/devtools-frontend/src/third_party/typescript' \
 	'third_party/devtools-frontend/src/third_party/axe-core' \
+	'third_party/devtools-frontend/src/front_end/third_party/acorn' \
+	'third_party/devtools-frontend/src/front_end/third_party/codemirror' \
 	'third_party/devtools-frontend/src/front_end/third_party/fabricjs' \
 	'third_party/devtools-frontend/src/front_end/third_party/lighthouse' \
 	'third_party/devtools-frontend/src/front_end/third_party/wasmparser' \
@@ -426,6 +424,7 @@ python2 build/linux/unbundle/remove_bundled_libraries.py \
 	'third_party/libaom' \
 	'third_party/libaom/source/libaom/third_party/vector' \
 	'third_party/libaom/source/libaom/third_party/x86inc' \
+	'third_party/libavif' \
 	'third_party/libdrm' \
 	'third_party/libgifcodec' \
 	'third_party/libjingle' \
@@ -446,6 +445,7 @@ python2 build/linux/unbundle/remove_bundled_libraries.py \
 	'third_party/libxslt' \
 	'third_party/libyuv' \
 	'third_party/lss' \
+	'third_party/lottie' \
 	'third_party/lzma_sdk' \
 	'third_party/mako' \
 	'third_party/markupsafe' \
@@ -461,6 +461,7 @@ python2 build/linux/unbundle/remove_bundled_libraries.py \
 	'third_party/one_euro_filter' \
 	'third_party/openh264' \
 	'third_party/openscreen' \
+	'third_party/openscreen/src/third_party/mozilla' \
 	'third_party/openscreen/src/third_party/tinycbor' \
 	'third_party/opus' \
 	'third_party/ots' \
@@ -521,7 +522,7 @@ python2 build/linux/unbundle/remove_bundled_libraries.py \
 	'third_party/web-animations-js' \
 	'third_party/webdriver' \
 	'third_party/webrtc' \
-	'third_party/webrtc/common_audio/third_party/fft4g' \
+	'third_party/webrtc/common_audio/third_party/ooura' \
 	'third_party/webrtc/common_audio/third_party/spl_sqrt_floor' \
 	'third_party/webrtc/modules/third_party/fft' \
 	'third_party/webrtc/modules/third_party/g711' \
@@ -531,7 +532,6 @@ python2 build/linux/unbundle/remove_bundled_libraries.py \
 	'third_party/widevine' \
         'third_party/woff2' \
         'third_party/xdg-utils' \
-        'third_party/yasm' \
         'third_party/zlib' \
 	'third_party/zlib/google' \
 	'tools/grit/third_party/six' \
@@ -579,9 +579,9 @@ export CXX=clang++
 # sure it sees python2 when it calls python
 export PATH=`pwd`:$PATH
 
-CHROMIUM_CORE_GN_DEFINES="use_sysroot=false is_debug=false fieldtrial_testing_like_official_build=true use_lld=false use_gold=true"
+CHROMIUM_CORE_GN_DEFINES="use_sysroot=false is_debug=false fieldtrial_testing_like_official_build=true use_lld=true use_gold=false"
 CHROMIUM_CORE_GN_DEFINES+=" is_clang=true clang_base_path=\"%{_prefix}\" clang_use_chrome_plugins=false "
-CHROMIUM_CORE_GN_DEFINES+=" treat_warnings_as_errors=false use_custom_libcxx=false "
+CHROMIUM_CORE_GN_DEFINES+=" treat_warnings_as_errors=false use_custom_libcxx=true "
 CHROMIUM_CORE_GN_DEFINES+=" use_system_libjpeg=true "
 CHROMIUM_CORE_GN_DEFINES+=" use_system_lcms2=true "
 CHROMIUM_CORE_GN_DEFINES+=" use_system_libpng=true "
@@ -653,7 +653,6 @@ gn_system_libraries="
     libwebp
     libxslt
     snappy
-    yasm
 "
 #    libpng
 #    opus
