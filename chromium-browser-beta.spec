@@ -38,7 +38,8 @@
 # Temporarily broken, cr_z_* symbols used even when we're supposed to use system minizip
 %bcond_without	system_minizip
 # chromium 58 fails with system vpx 1.6.1
-%bcond_without	system_vpx
+%bcond_with	system_vpx
+# system re2 doesn't work with custom libcxx
 %bcond_with	system_re2
 
 # Always support proprietary codecs
@@ -51,7 +52,7 @@
 Name: 		chromium-browser-%{channel}
 # Working version numbers can be found at
 # http://omahaproxy.appspot.com/
-Version: 	84.0.4147.85
+Version: 	85.0.4183.39
 Release: 	1%{?extrarelsuffix}
 Summary: 	A fast webkit-based web browser
 Group: 		Networking/WWW
@@ -110,7 +111,7 @@ Patch57:	https://src.fedoraproject.org/rpms/chromium/raw/master/f/chromium-78-pr
 # https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/files/chromium-77-clang.patch
 Patch59:	https://src.fedoraproject.org/rpms/chromium/raw/master/f/chromium-77-clang.patch
 # /../../ui/base/cursor/ozone/bitmap_cursor_factory_ozone.cc:53:15: error: 'find_if' is not a member of 'std'; did you mean 'find'? 
-Patch63:	https://src.fedoraproject.org/rpms/chromium/raw/master/f/chromium-79.0.3945.56-fix-find_if.patch
+#Patch63:	https://src.fedoraproject.org/rpms/chromium/raw/master/f/chromium-79.0.3945.56-fix-find_if.patch
 
 
 # Use lstdc++ on EPEL7 only
@@ -150,7 +151,6 @@ Patch1007:	chromium-81-enable-gpu-features.patch
 # stop so many build warnings
 Patch1008:	chromium-71.0.3578.94-quieten.patch
 Patch1009:	chromium-trace.patch
-Patch1010:	chromium-84-compile.patch
 
 Provides: 	%{crname}
 Obsoletes: 	chromium-browser-unstable < 26.0.1410.51
@@ -444,8 +444,8 @@ python2 build/linux/unbundle/remove_bundled_libraries.py \
 	'third_party/libxml/chromium' \
 	'third_party/libxslt' \
 	'third_party/libyuv' \
-	'third_party/lss' \
 	'third_party/lottie' \
+	'third_party/lss' \
 	'third_party/lzma_sdk' \
 	'third_party/mako' \
 	'third_party/markupsafe' \
@@ -463,6 +463,7 @@ python2 build/linux/unbundle/remove_bundled_libraries.py \
 	'third_party/openscreen' \
 	'third_party/openscreen/src/third_party/mozilla' \
 	'third_party/openscreen/src/third_party/tinycbor' \
+	'third_party/opencv' \
 	'third_party/opus' \
 	'third_party/ots' \
 	'third_party/pdfium' \
@@ -531,6 +532,7 @@ python2 build/linux/unbundle/remove_bundled_libraries.py \
 	'third_party/webrtc/rtc_base/third_party/sigslot' \
 	'third_party/widevine' \
         'third_party/woff2' \
+	'third_party/xcbproto' \
         'third_party/xdg-utils' \
         'third_party/zlib' \
 	'third_party/zlib/google' \
@@ -579,7 +581,7 @@ export CXX=clang++
 # sure it sees python2 when it calls python
 export PATH=`pwd`:$PATH
 
-CHROMIUM_CORE_GN_DEFINES="use_sysroot=false is_debug=false fieldtrial_testing_like_official_build=true use_lld=true use_gold=false"
+CHROMIUM_CORE_GN_DEFINES="use_sysroot=false is_debug=false fieldtrial_testing_like_official_build=true use_lld=false use_gold=true"
 CHROMIUM_CORE_GN_DEFINES+=" is_clang=true clang_base_path=\"%{_prefix}\" clang_use_chrome_plugins=false "
 CHROMIUM_CORE_GN_DEFINES+=" treat_warnings_as_errors=false use_custom_libcxx=true "
 CHROMIUM_CORE_GN_DEFINES+=" use_system_libjpeg=true "
