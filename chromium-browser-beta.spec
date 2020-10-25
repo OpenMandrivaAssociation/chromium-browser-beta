@@ -172,6 +172,7 @@ BuildRequires: 	flex
 BuildRequires:	pkgconfig(alsa)
 BuildRequires:	pkgconfig(krb5)
 BuildRequires:	pkgconfig(openh264)
+BuildRequires:	pkgconfig(libunwind)
 %if %{with system_re2}
 BuildRequires:	pkgconfig(re2)
 %endif
