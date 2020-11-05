@@ -56,7 +56,7 @@
 Name: 		chromium-browser-%{channel}
 # Working version numbers can be found at
 # http://omahaproxy.appspot.com/
-Version: 	87.0.4280.27
+Version: 	87.0.4280.40
 Release: 	1%{?extrarelsuffix}
 Summary: 	A fast webkit-based web browser
 Group: 		Networking/WWW
@@ -366,6 +366,7 @@ export PATH=$PWD/bfd:$PATH
 # Workaround for build failure
 %global ldflags %{ldflags} -Wl,-z,notext
 %endif
+%global optflags %{optflags} -I%{_includedir}/libunwind
 
 export CC=clang
 export CXX=clang++
