@@ -37,14 +37,14 @@
 # crisb - ozone causes a segfault on startup as of 57.0.2987.133, doesn't compile in 80.x
 %bcond_with	ozone
 # Breaks the build as of chromium 83, icu 66.1
-%bcond_with	system_icu
+%bcond_without	system_icu
 %bcond_without	system_ffmpeg
 # Temporarily broken, cr_z_* symbols used even when we're supposed to use system minizip
 %bcond_without	system_minizip
 # chromium 58 fails with system vpx 1.6.1
-%bcond_with	system_vpx
+%bcond_without	system_vpx
 # system re2 doesn't work with custom libcxx
-%bcond_with	system_re2
+%bcond_without	system_re2
 
 # Always support proprietary codecs
 # or html5 does not work
