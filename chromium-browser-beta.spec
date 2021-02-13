@@ -208,6 +208,7 @@ BuildRequires:	gtk+2.0-devel
 BuildRequires: 	pkgconfig(nspr)
 BuildRequires: 	pkgconfig(zlib)
 BuildRequires: 	pkgconfig(xscrnsaver)
+BuildRequires:	pkgconfig(xshmfence)
 BuildRequires: 	pkgconfig(glu)
 BuildRequires: 	pkgconfig(gl)
 BuildRequires: 	cups-devel
