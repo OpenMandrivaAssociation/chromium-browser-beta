@@ -1,2 +1,3 @@
 sources:
-  chromium-90.0.4430.61.tar.xz: 792c33f0fb22dcb502063197688bb3e241d1df9f
+  chromium-95.0.4638.17.tar.xz: 4f7cf7ce4b3b7d8f3898f9318ab72aaad2242c1e
+  chromium-95-patchset-4.tar.xz: 7cfa029d29b707bbd7a8f88ba8dbb2a752517c94

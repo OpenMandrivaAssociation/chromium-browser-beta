@@ -1,10 +1,12 @@
-%define channel dev
+%define channel beta
 %if "%{channel}" == "stable"
 %define namesuffix %{nil}
 %else
 %define namesuffix -%{channel}
 %endif
 
+# Workaround for debugsource package being empty
+%define _empty_manifest_terminate_build 0
 %define _disable_ld_no_undefined 1
 # Chromium buildmess uses its own LTO
 %global _disable_lto 1
@@ -16,7 +18,6 @@
 %define crname chromium-browser
 %define _crdir %{_libdir}/%{crname}
 %define _src %{_topdir}/SOURCES
-%define	debug_package %nil
 
 %ifarch %ix86
 %define _build_pkgcheck_set %{nil}
@@ -56,7 +57,7 @@
 Name: 		chromium-browser-%{channel}
 # Working version numbers can be found at
 # http://omahaproxy.appspot.com/
-Version: 	90.0.4430.61
+Version: 	95.0.4638.17
 Release: 	1%{?extrarelsuffix}
 Summary: 	A fast webkit-based web browser
 Group: 		Networking/WWW
@@ -87,12 +88,8 @@ Patch6:		https://src.fedoraproject.org/rpms/chromium/raw/master/f/chromium-77.0.
 Patch8:		https://src.fedoraproject.org/rpms/chromium/raw/master/f/chromium-71.0.3578.98-widevine-r3.patch
 # Disable fontconfig cache magic that breaks remoting (originally from Fedora, ported to 81 code base)
 Patch9:		chromium-83-disable-fontconfig-cache-magic.patch
-# drop rsp clobber, which breaks gcc9 (thanks to Jeff Law)
-Patch10:	https://src.fedoraproject.org/rpms/chromium/raw/master/f/chromium-78.0.3904.70-gcc9-drop-rsp-clobber.patch
 # Try to load widevine from other places
 Patch11:	https://src.fedoraproject.org/rpms/chromium/raw/master/f/chromium-79.0.3945.56-widevine-other-locations.patch
-# Try to fix version.py for Rawhide
-Patch12:	https://src.fedoraproject.org/rpms/chromium/raw/master/f/chromium-71.0.3578.98-py2-bootstrap.patch
 # Add "Fedora" to the user agent string
 #Patch13:	https://src.fedoraproject.org/rpms/chromium/raw/master/f/chromium-79.0.3945.56-fedora-user-agent.patch
 # Needs to be submitted..
@@ -117,14 +114,7 @@ Patch54:	https://src.fedoraproject.org/rpms/chromium/raw/master/f/chromium-77.0.
 
 ### Chromium gcc/libstdc++ support ###
 # https://github.com/stha09/chromium-patches
-Patch550:	https://raw.githubusercontent.com/stha09/chromium-patches/master/chromium-86-ConsumeDurationNumber-constexpr.patch
-Patch551:	https://raw.githubusercontent.com/stha09/chromium-patches/master/chromium-86-ImageMemoryBarrierData-init.patch
-Patch553:	https://raw.githubusercontent.com/stha09/chromium-patches/master/chromium-87-compiler.patch
-Patch554:	https://raw.githubusercontent.com/stha09/chromium-patches/master/chromium-86-nearby-explicit.patch
-Patch555:	https://raw.githubusercontent.com/stha09/chromium-patches/master/chromium-86-nearby-include.patch
-Patch557:	https://raw.githubusercontent.com/stha09/chromium-patches/master/chromium-78-protobuf-RepeatedPtrField-export.patch
-Patch559:	https://raw.githubusercontent.com/stha09/chromium-patches/master/chromium-80-QuicStreamSendBuffer-deleted-move-constructor.patch
-Patch560:	https://raw.githubusercontent.com/stha09/chromium-patches/master/chromium-84-blink-disable-clang-format.patch
+Source550:	https://github.com/stha09/chromium-patches/releases/download/chromium-95-patchset-4/chromium-95-patchset-4.tar.xz
 
 ### Chromium Tests Patches ###
 # suse, system libs
@@ -135,17 +125,15 @@ Patch602:	https://raw.githubusercontent.com/archlinuxarm/PKGBUILDs/master/extra/
 # Enable VAAPI support on Linux
 Patch650:	https://raw.githubusercontent.com/saiarcot895/chromium-ubuntu-build/master/debian/patches/enable-vaapi-on-linux.diff
 Patch651:	https://raw.githubusercontent.com/saiarcot895/chromium-ubuntu-build/master/debian/patches/vdpau-support.patch
-Patch652:	chromium-88-default-video-acceleration-on.patch
 
 # Fixes from Arch
-Patch660:	https://aur.archlinux.org/cgit/aur.git/plain/chromium-skia-harmony.patch
 Patch661:	https://aur.archlinux.org/cgit/aur.git/plain/wayland-egl.patch
-Patch662:	https://aur.archlinux.org/cgit/aur.git/plain/chromium-glibc-2.33.patch
-
+Patch662:	https://aur.archlinux.org/cgit/aur.git/plain/sql-make-VirtualCursor-standard-layout-type.patch
+Patch663:	https://aur.archlinux.org/cgit/aur.git/plain/use-oauth2-client-switches-as-default.patch
 
 # mga
-Patch700:	chromium-81-extra-media.patch
-Patch701:	chromium-69-wmvflvmpg.patch
+#Patch700:	chromium-81-extra-media.patch
+#Patch701:	chromium-69-wmvflvmpg.patch
 
 # omv
 Patch1001:	chromium-64-system-curl.patch
@@ -153,8 +141,12 @@ Patch1002:	chromium-69-no-static-libstdc++.patch
 Patch1003:	chromium-system-zlib.patch
 Patch1004:	chromium-88-less-blacklist-nonsense.patch
 Patch1005:	chromium-90-compilefixes.patch
-Patch1006:	chromium-90-buildfixes.patch
+Patch1006:	chromium-92-fix-bogus-assert.patch
 Patch1007:	chromium-81-enable-gpu-features.patch
+#Patch1009:	chromium-92-skia-freetype-2.11.patch
+Patch1008:	chromium-94-compiler.patch
+Patch1009:	chromium-93-ffmpeg-4.4.patch
+Patch1010:	chromium-94-glibc-2.34.patch
 
 Provides: 	%{crname}
 Obsoletes: 	chromium-browser-unstable < 26.0.1410.51
@@ -172,9 +164,9 @@ BuildRequires:	pkgconfig(libunwind)
 BuildRequires:	pkgconfig(re2)
 %endif
 BuildRequires:	pkgconfig(com_err)
-BuildRequires:	python2dist(json5)
-BuildRequires:	python2-pkg-resources
-BuildRequires:	python2-xcbgen
+#BuildRequires:	python3dist(json5)
+BuildRequires:	python3-pkg-resources
+#BuildRequires:	python3-xcbgen
 BuildRequires: 	alsa-oss-devel
 BuildRequires:	atomic-devel
 BuildRequires:	harfbuzz-devel
@@ -294,7 +286,12 @@ members of the Chromium and WebDriver teams.
 
 
 %prep
-%autosetup -p1 -n chromium-%{version}
+%autosetup -p1 -n chromium-%{version} -a 550
+P=550
+for i in patches/*patch; do
+	patch -p1 -b -z .${P}~ <$i
+	P=$((P+1))
+done
 
 rm -rf third_party/binutils/
 
@@ -310,7 +307,7 @@ cmp $FILE $FILE.orig && exit 1
 
 # gn is rather convoluted and not python3 friendly -- let's make
 # sure it sees python2 when it calls python
-ln -s %{_bindir}/python2 python
+#ln -s %{_bindir}/python2 python
 
 # use the system nodejs
 mkdir -p third_party/node/linux/node-linux-x64/bin
@@ -333,12 +330,12 @@ for lib in %{system_libs}; do
 		\! -regex '.*\.\(gn\|gni\|isolate\)' \
 		-delete
 done
-python2 build/linux/unbundle/replace_gn_files.py \
+python build/linux/unbundle/replace_gn_files.py \
 	--system-libraries %{system_libs}
 
 # Look, I don't know. This package is spit and chewing gum. Sorry.
-rm -rf third_party/markupsafe
-ln -s %{python2_sitearch}/markupsafe third_party/markupsafe
+#rm -rf third_party/markupsafe
+#ln -s %{python2_sitearch}/markupsafe third_party/markupsafe
 # We should look on removing other python packages as well i.e. ply
 
 # workaround build failure
@@ -346,12 +343,20 @@ if [ ! -f chrome/test/data/webui/i18n_process_css_test.html ]; then
 	touch chrome/test/data/webui/i18n_process_css_test.html
 fi
 
+# Let's trust our kernel and libc, not files copied in
+# from some horribly outdated distro
+for i in sandbox/linux/system_headers/*_linux_syscalls.h; do
+	echo '#include <asm/unistd.h>' >$i
+done
+
+
 %build
 . %{_sysconfdir}/profile.d/90java.sh
+sed -i -e "s,/usr/bin/java,$(which java),g" third_party/closure_compiler/compiler.py
 
 %ifarch %{arm}
 # Use linker flags to reduce memory consumption on low-mem architectures
-%global optflags %(echo %{optflags} | sed -e 's/-g /-g0 /' -e 's/-gdwarf-4//')
+%global optflags %(echo %{optflags} | sed -e 's/-g[1-3] /-g0 /' -e 's/-gdwarf-4//')
 mkdir -p bfd
 ln -s %{_bindir}/ld.bfd bfd/ld
 export PATH=$PWD/bfd:$PATH
@@ -362,14 +367,15 @@ export PATH=$PWD/bfd:$PATH
 # Workaround for build failure
 %global ldflags %{ldflags} -Wl,-z,notext
 %endif
-%global optflags %{optflags} -I%{_includedir}/libunwind
+# -g3 output is too large for builders to handle
+%global optflags %{optflags} -I%{_includedir}/libunwind -DUSE_SYSTEM_MINIZIP=1 -g1
 
 export CC=clang
 export CXX=clang++
 
 # gn is rather convoluted and not python3 friendly -- let's make
 # sure it sees python2 when it calls python
-export PATH=`pwd`:$PATH
+#export PATH=`pwd`:$PATH
 
 CHROMIUM_CORE_GN_DEFINES="use_sysroot=false is_debug=false fieldtrial_testing_like_official_build=true use_lld=false use_gold=true"
 CHROMIUM_CORE_GN_DEFINES+=" is_clang=true clang_base_path=\"%{_prefix}\" clang_use_chrome_plugins=false "
@@ -454,11 +460,11 @@ fi
 export CC=%{__cc}
 export CXX=%{__cxx}
 
-python2 tools/gn/bootstrap/bootstrap.py --skip-generate-buildfiles
+python tools/gn/bootstrap/bootstrap.py --skip-generate-buildfiles
 
-python2 third_party/libaddressinput/chromium/tools/update-strings.py
+python third_party/libaddressinput/chromium/tools/update-strings.py
 
-out/Release/gn gen --script-executable=/usr/bin/python2 --args="${CHROMIUM_CORE_GN_DEFINES} ${CHROMIUM_BROWSER_GN_DEFINES}" out/Release
+out/Release/gn gen --script-executable=/usr/bin/python --args="${CHROMIUM_CORE_GN_DEFINES} ${CHROMIUM_BROWSER_GN_DEFINES}" out/Release
 
 # Note: DON'T use system sqlite (3.7.3) -- it breaks history search
 # As of 36.0.1985.143, use_system_icu breaks the build.
