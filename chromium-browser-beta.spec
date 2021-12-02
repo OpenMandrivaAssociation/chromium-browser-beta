@@ -78,7 +78,7 @@
 Name: 		chromium-browser-%{channel}
 # Working version numbers can be found at
 # http://omahaproxy.appspot.com/
-Version: 	96.0.4664.35
+Version: 	97.0.4692.20
 Release: 	1%{?extrarelsuffix}
 Summary: 	A fast webkit-based web browser
 Group: 		Networking/WWW
@@ -139,7 +139,7 @@ Patch103:	https://raw.githubusercontent.com/archlinux/svntogit-packages/packages
 
 ### Chromium gcc/libstdc++ support ###
 # https://github.com/stha09/chromium-patches
-Source500:	https://github.com/stha09/chromium-patches/releases/download/chromium-96-patchset-4/chromium-96-patchset-4.tar.xz
+Source500:	https://github.com/stha09/chromium-patches/releases/download/chromium-97-patchset-4/chromium-97-patchset-4.tar.xz
 
 %if 0
 ### Chromium Tests Patches ###
@@ -250,10 +250,10 @@ BuildRequires: 	pkgconfig(libusb-1.0)
 BuildRequires:  speech-dispatcher-devel
 BuildRequires:  pkgconfig(libpci)
 BuildRequires:	pkgconfig(libexif)
-BuildRequires:	python3dist(markupsafe)
 BuildRequires:	ninja
 BuildRequires:	nodejs
 BuildRequires:	jdk-current
+BuildRequires:	python3dist(markupsafe)
 
 %description
 Chromium is a browser that combines a minimal design with sophisticated
@@ -295,10 +295,13 @@ members of the Chromium and WebDriver teams.
 
 
 %prep
-%autosetup -p1 -n chromium-%{version}
-tar xf %{S:500}
+%autosetup -p1 -n chromium-%{version} -a 500
+j=1
 for i in patches/*; do
-	patch -p1 -z .stha09~ -b <$i
+	if basename $i |grep -qE '~$'; then continue; fi
+	echo "Applying `basename $i`"
+	patch -p1 -z .stha09-${j}~ -b <$i
+	j=$((j+1))
 done
 
 rm -rf third_party/binutils/
