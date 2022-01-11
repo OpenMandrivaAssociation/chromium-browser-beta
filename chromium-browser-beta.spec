@@ -364,6 +364,8 @@ export PATH=$PWD/bfd:$PATH
 %global ldflags %{ldflags} -Wl,-z,notext
 %endif
 %global optflags %{optflags} -I%{_includedir}/libunwind
+# -Workaround for -Os _Float32 issue
+%global optflags %{optflags} -O3
 
 export CC=clang
 export CXX=clang++
