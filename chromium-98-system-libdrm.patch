@@ -1,0 +1,12 @@
+diff -up chromium-98.0.4758.48/media/gpu/chromeos/video_decoder_pipeline.cc.omv~ chromium-98.0.4758.48/media/gpu/chromeos/video_decoder_pipeline.cc
+--- chromium-98.0.4758.48/media/gpu/chromeos/video_decoder_pipeline.cc.omv~	2022-01-11 18:32:28.061858106 +0100
++++ chromium-98.0.4758.48/media/gpu/chromeos/video_decoder_pipeline.cc	2022-01-11 18:32:37.471872708 +0100
+@@ -28,7 +28,7 @@
+ 
+ #if BUILDFLAG(USE_VAAPI)
+ #include "media/gpu/vaapi/vaapi_video_decoder.h"
+-#include "third_party/libdrm/src/include/drm/drm_fourcc.h"
++#include <drm/drm_fourcc.h>
+ #elif BUILDFLAG(USE_V4L2_CODEC)
+ #include "media/gpu/v4l2/v4l2_video_decoder.h"
+ #else
