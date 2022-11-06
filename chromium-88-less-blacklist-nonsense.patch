@@ -1,6 +1,6 @@
-diff -up chromium-94.0.4603.0/gpu/config/gpu_driver_bug_list.json.29~ chromium-94.0.4603.0/gpu/config/gpu_driver_bug_list.json
---- chromium-94.0.4603.0/gpu/config/gpu_driver_bug_list.json.29~	2021-08-10 18:50:19.000000000 +0200
-+++ chromium-94.0.4603.0/gpu/config/gpu_driver_bug_list.json	2021-08-16 05:38:22.321483845 +0200
+diff -up chromium-92.0.4515.131/gpu/config/gpu_driver_bug_list.json.32~ chromium-92.0.4515.131/gpu/config/gpu_driver_bug_list.json
+--- chromium-92.0.4515.131/gpu/config/gpu_driver_bug_list.json.32~	2021-08-03 04:50:20.000000000 +0200
++++ chromium-92.0.4515.131/gpu/config/gpu_driver_bug_list.json	2021-08-14 05:15:32.404048344 +0200
 @@ -331,18 +331,6 @@
        ]
      },
@@ -100,7 +100,7 @@ diff -up chromium-94.0.4603.0/gpu/config/gpu_driver_bug_list.json.29~ chromium-9
 -    {
        "id": 132,
        "description": "On Intel GPUs MSAA performance is not acceptable for GPU rasterization",
-       "cr_bugs": [527565],
+       "cr_bugs": [527565, 1298585],
 @@ -1036,27 +971,6 @@
        "disabled_extensions": ["GL_NV_path_rendering"]
      },
@@ -261,7 +261,7 @@ diff -up chromium-94.0.4603.0/gpu/config/gpu_driver_bug_list.json.29~ chromium-9
        "id": 224,
        "description": "VPx decoding isn't supported well before Windows 10 creators update.",
        "cr_bugs": [616318, 667532],
-@@ -2504,18 +2328,6 @@
+@@ -2501,18 +2325,6 @@
        ]
      },
      {
@@ -280,7 +280,7 @@ diff -up chromium-94.0.4603.0/gpu/config/gpu_driver_bug_list.json.29~ chromium-9
        "id": 271,
        "cr_bugs": [860418],
        "description": "Frequent crashes in glClear on Mali-T7xx on N with driver 12.1.01alp0",
-@@ -2641,27 +2453,6 @@
+@@ -2638,27 +2450,6 @@
        ]
      },
      {
@@ -308,7 +308,7 @@ diff -up chromium-94.0.4603.0/gpu/config/gpu_driver_bug_list.json.29~ chromium-9
        "id": 286,
        "cr_bugs": [908069],
        "description": "Video corruption on Intel HD 530 without hardware overlay support",
-@@ -2797,23 +2588,6 @@
+@@ -2794,23 +2585,6 @@
        ]
      },
      {
@@ -332,7 +332,7 @@ diff -up chromium-94.0.4603.0/gpu/config/gpu_driver_bug_list.json.29~ chromium-9
        "id": 303,
        "cr_bugs": [890227],
        "description": "Dynamic texture map crashes on Intel drivers less than version 24",
-@@ -3151,24 +2925,6 @@
+@@ -3148,24 +2922,6 @@
        ]
      },
      {
@@ -357,9 +357,9 @@ diff -up chromium-94.0.4603.0/gpu/config/gpu_driver_bug_list.json.29~ chromium-9
        "id": 332,
        "cr_bugs": [1045586],
        "description": "Send empty video hdr metadata due to crashes on AMD",
-diff -up chromium-94.0.4603.0/gpu/config/software_rendering_list.json.29~ chromium-94.0.4603.0/gpu/config/software_rendering_list.json
---- chromium-94.0.4603.0/gpu/config/software_rendering_list.json.29~	2021-08-10 18:50:19.000000000 +0200
-+++ chromium-94.0.4603.0/gpu/config/software_rendering_list.json	2021-08-16 05:35:14.624381386 +0200
+diff -up chromium-92.0.4515.131/gpu/config/software_rendering_list.json.32~ chromium-92.0.4515.131/gpu/config/software_rendering_list.json
+--- chromium-92.0.4515.131/gpu/config/software_rendering_list.json.32~	2021-08-03 04:50:20.000000000 +0200
++++ chromium-92.0.4515.131/gpu/config/software_rendering_list.json	2021-08-14 05:14:42.843255185 +0200
 @@ -40,41 +40,6 @@
        ]
      },

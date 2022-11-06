@@ -17,11 +17,20 @@
 %define _crdir %{_libdir}/%{crname}
 %define _src %{_topdir}/SOURCES
 # For incomplete debug package support
-#define	_empty_manifest_terminate_build 0
+%define	_empty_manifest_terminate_build 0
 
 %ifarch %ix86
 %define _build_pkgcheck_set %{nil}
 %endif
+
+# crisb - build hangs with python3.11 during rminjs
+%if 0
+#%omvver > 4050000
+%define build_py python3.9
+%else
+%define build_py python3
+%endif
+
 
 # FIXME As of 97.0.4688.2, Chromium crashes frequently when
 # built with fortification enabled.
@@ -45,7 +54,7 @@
 #global system_libs icu fontconfig harfbuzz-ng libjpeg libpng snappy libdrm ffmpeg flac libwebp zlib libxml libxslt re2 libusb libevent freetype opus openh264
 # KNOWN TO WORK:  global system_libs zlib ffmpeg fontconfig harfbuzz-ng libjpeg libpng libdrm flac libwebp
 # KNOWN TO BREAK: global system_libs zlib ffmpeg fontconfig harfbuzz-ng libjpeg libpng libdrm flac libwebp libxml libxslt libevent opus openh264
-%global system_libs zlib ffmpeg fontconfig harfbuzz-ng libjpeg libpng libdrm flac libwebp libxml libxslt opus openh264 libusb
+%global system_libs brotli zlib ffmpeg fontconfig harfbuzz-ng libjpeg libpng libdrm flac libwebp libxml libxslt opus openh264 libusb
 # FIXME add libvpx
 
 # Set up Google API keys, see http://www.chromium.org/developers/how-tos/api-keys
@@ -78,7 +87,7 @@
 Name: 		chromium-browser-%{channel}
 # Working version numbers can be found at
 # http://omahaproxy.appspot.com/
-Version: 	98.0.4758.74
+Version: 	108.0.5359.30
 Release: 	1%{?extrarelsuffix}
 Summary: 	A fast webkit-based web browser
 Group: 		Networking/WWW
@@ -107,7 +116,7 @@ Patch6:		https://src.fedoraproject.org/rpms/chromium/raw/master/f/chromium-77.0.
 # https://gitweb.gentoo.org/repo/gentoo.git/tree/www-client/chromium/files/chromium-widevine-r3.patch
 Patch8:		https://src.fedoraproject.org/rpms/chromium/raw/master/f/chromium-71.0.3578.98-widevine-r3.patch
 # Try to load widevine from other places
-Patch11:	https://src.fedoraproject.org/rpms/chromium/raw/master/f/chromium-79.0.3945.56-widevine-other-locations.patch
+Patch11:	https://src.fedoraproject.org/rpms/chromium/raw/master/f/chromium-100.0.4896.60-widevine-other-locations.patch
 # Add "Fedora" to the user agent string
 #Patch13:	https://src.fedoraproject.org/rpms/chromium/raw/master/f/chromium-79.0.3945.56-fedora-user-agent.patch
 # https://gitweb.gentoo.org/repo/gentoo.git/tree/www-client/chromium/files/chromium-unbundle-zlib.patch
@@ -117,13 +126,17 @@ Patch54:	https://src.fedoraproject.org/rpms/chromium/raw/master/f/chromium-77.0.
 # /../../ui/base/cursor/ozone/bitmap_cursor_factory_ozone.cc:53:15: error: 'find_if' is not a member of 'std'; did you mean 'find'? 
 #Patch63:	https://src.fedoraproject.org/rpms/chromium/raw/master/f/chromium-79.0.3945.56-fix-find_if.patch
 
+%if %omvver > 4050000
+# only cooker has markupsafe > 2.0
+Patch65: 	https://src.fedoraproject.org/rpms/chromium/raw/rawhide/f/chromium-99.0.4844.84-markdownsafe-soft_str.patch
+%endif
+
 # From Arch and Gentoo
 # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=chromium-dev
-Patch100:	https://raw.githubusercontent.com/gentoo/gentoo/master/www-client/chromium/files/chromium-96-EnumTable-crash.patch
 Patch101:	https://raw.githubusercontent.com/gentoo/gentoo/master/www-client/chromium/files/chromium-93-InkDropHost-crash.patch
 Patch102:	https://raw.githubusercontent.com/gentoo/gentoo/master/www-client/chromium/files/chromium-shim_headers.patch
 Patch103:	https://raw.githubusercontent.com/archlinux/svntogit-packages/packages/chromium/trunk/use-oauth2-client-switches-as-default.patch
-
+Patch105:	reverse-roll-src-third_party-ffmpeg.patch
 
 # Use lstdc++ on EPEL7 only
 #Patch101:	https://src.fedoraproject.org/rpms/chromium/raw/master/f/chromium-75.0.3770.100-epel7-stdc++.patch
@@ -137,40 +150,38 @@ Patch103:	https://raw.githubusercontent.com/archlinux/svntogit-packages/packages
 
 ### Chromium gcc/libstdc++ support ###
 # https://github.com/stha09/chromium-patches
-Source500:	https://github.com/stha09/chromium-patches/releases/download/chromium-98-patchset-5/chromium-98-patchset-5.tar.xz
+Source500:	https://github.com/stha09/chromium-patches/releases/download/chromium-108-patchset-2/chromium-108-patchset-2.tar.xz
 
 ### Chromium Tests Patches ###
 # Arch Linux, fix for compile error with system ICU
-Patch602:	https://raw.githubusercontent.com/archlinuxarm/PKGBUILDs/master/extra/chromium/chromium-system-icu.patch
 
 # Enable VAAPI support on Linux
 # FIXME reenable once the patchset has caught up with upstream
 # https://github.com/saiarcot895/chromium-ubuntu-build
 
-# Fixes from Arch
-Patch661:	https://aur.archlinux.org/cgit/aur.git/plain/wayland-egl.patch
-
 # omv
 Patch1001:	chromium-64-system-curl.patch
 Patch1003:	chromium-system-zlib.patch
-Patch1004:	chromium-88-less-blacklist-nonsense.patch
-Patch1005:	chromium-98-system-libdrm.patch
-Patch1007:	chromium-81-enable-gpu-features.patch
+#Patch1007:	chromium-81-enable-gpu-features.patch
 Patch2:		https://src.fedoraproject.org/rpms/chromium/raw/master/f/chromium-67.0.3396.62-gn-system.patch
 Patch1002:	chromium-69-no-static-libstdc++.patch
 Patch1006:	https://raw.githubusercontent.com/ungoogled-software/ungoogled-chromium-fedora/master/chromium-91.0.4472.77-java-only-allowed-in-android-builds.patch
 Patch1009:	chromium-97-compilefixes.patch
 Patch1010:	chromium-97-ffmpeg-4.4.1.patch
 Patch1011:	chromium-99-ffmpeg-5.0.patch
+Patch1013:	chromium-105-minizip-ng.patch
+Patch1014:	chromium-107-ffmpeg-5.1.patch
 
 Provides: 	%{crname}
 Obsoletes: 	chromium-browser-unstable < 26.0.1410.51
 Obsoletes: 	chromium-browser-beta < 26.0.1410.51
 Obsoletes: 	chromium-browser < 1:9.0.597.94
+BuildRequires:	glibc-static-devel
 BuildRequires: 	gperf
 BuildRequires: 	bison
 BuildRequires: 	re2c
 BuildRequires: 	flex
+BuildRequires:	git
 BuildRequires:	pkgconfig(alsa)
 BuildRequires:	pkgconfig(krb5)
 BuildRequires:	pkgconfig(openh264)
@@ -197,6 +208,11 @@ BuildRequires:  pkgconfig(libva-drm)
 BuildRequires:  pkgconfig(libva-glx)
 BuildRequires:  pkgconfig(libva-x11)
 BuildRequires:	pkgconfig(dri)
+BuildRequires:	pkgconfig(Qt5Core)
+BuildRequires:	pkgconfig(Qt5DBus)
+BuildRequires:	pkgconfig(Qt5Gui)
+BuildRequires:	pkgconfig(Qt5Widgets)
+BuildRequires:	pkgconfig(Qt5OpenGL)
 BuildRequires:	%{_lib}GL-devel
 BuildRequires: 	bzip2-devel
 BuildRequires: 	jpeg-devel
@@ -239,10 +255,20 @@ BuildRequires: 	pkgconfig(opus)
 BuildRequires: 	pkgconfig(libwebp)
 BuildRequires: 	pkgconfig(speex)
 BuildRequires:	pkgconfig(lcms2)
+BuildRequires:	pkgconfig(libffi)
 %if %{with system_minizip}
 BuildRequires: 	pkgconfig(minizip)
 %endif
+
+%if %omvver > 4050000
+BuildRequires:	pkgconfig(python-3.9)
+%else
+BuildRequires:	pkgconfig(python)
 BuildRequires:  pkgconfig(protobuf)
+BuildRequires:	python3dist(protobuf)
+BuildRequires:  python3dist(markupsafe)
+%endif
+
 BuildRequires: 	yasm
 BuildRequires: 	pkgconfig(libusb-1.0)
 BuildRequires:  speech-dispatcher-devel
@@ -251,7 +277,6 @@ BuildRequires:	pkgconfig(libexif)
 BuildRequires:	ninja
 BuildRequires:	nodejs
 BuildRequires:	jdk-current
-BuildRequires:	python3dist(markupsafe)
 
 %description
 Chromium is a browser that combines a minimal design with sophisticated
@@ -297,6 +322,8 @@ members of the Chromium and WebDriver teams.
 j=1
 for i in patches/*; do
 	if basename $i |grep -qE '~$'; then continue; fi
+	# This has already gone upstream
+	[ "$i" = "patches/chromium-108-LabToLCH-include.patch" ] && continue
 	echo "Applying `basename $i`"
 	patch -p1 -z .stha09-${j}~ -b <$i
 	j=$((j+1))
@@ -335,13 +362,18 @@ for lib in %{system_libs}; do
 		\! -regex '.*\.\(gn\|gni\|isolate\)' \
 		-delete
 done
-python build/linux/unbundle/replace_gn_files.py \
+%build_py build/linux/unbundle/replace_gn_files.py \
 	--system-libraries %{system_libs}
+# Forcing an outdated copy of what should really match system headers
+# is just about as dumb as something can get
+cp -f %{_includedir}/wayland-client-core.h third_party/wayland/src/src/
 
+%if %omvver <= 4050000
 # Look, I don't know. This package is spit and chewing gum. Sorry.
 rm -rf third_party/markupsafe
 ln -s %{python3_sitearch}/markupsafe third_party/markupsafe
 # We should look on removing other python packages as well i.e. ply
+%endif
 
 # workaround build failure
 if [ ! -f chrome/test/data/webui/i18n_process_css_test.html ]; then
@@ -353,7 +385,6 @@ fi
 
 %ifarch %{arm}
 # Use linker flags to reduce memory consumption on low-mem architectures
-%global optflags %(echo %{optflags} | sed -e 's/-g /-g0 /' -e 's/-gdwarf-4//')
 mkdir -p bfd
 ln -s %{_bindir}/ld.bfd bfd/ld
 export PATH=$PWD/bfd:$PATH
@@ -364,17 +395,16 @@ export PATH=$PWD/bfd:$PATH
 # Workaround for build failure
 %global ldflags %{ldflags} -Wl,-z,notext
 %endif
+%global optflags %(echo %{optflags} | sed -e 's/-g3 /-g1 /' -e 's/-gdwarf-4//')
 %global optflags %{optflags} -I%{_includedir}/libunwind
-# -Workaround for -Os _Float32 issue
-%global optflags %{optflags} -O3
 
 export CC=clang
 export CXX=clang++
 
-CHROMIUM_CORE_GN_DEFINES="use_sysroot=false is_debug=false fieldtrial_testing_like_official_build=true use_lld=false use_gold=true"
+CHROMIUM_CORE_GN_DEFINES="use_sysroot=false is_debug=false fieldtrial_testing_like_official_build=true "
 CHROMIUM_CORE_GN_DEFINES+=" is_clang=true clang_base_path=\"%{_prefix}\" clang_use_chrome_plugins=false "
 CHROMIUM_CORE_GN_DEFINES+=" treat_warnings_as_errors=false "
-CHROMIUM_CORE_GN_DEFINES+=" use_custom_libcxx=true "
+CHROMIUM_CORE_GN_DEFINES+=" use_custom_libcxx=true use_system_libffi=true "
 for i in %{system_libs}; do
 	if [ "$i" = "harfbuzz-ng" ]; then
 		CHROMIUM_CORE_GN_DEFINES+=" use_system_harfbuzz=true "
@@ -390,7 +420,7 @@ CHROMIUM_CORE_GN_DEFINES+=" use_system_minigbm=true "
 CHROMIUM_CORE_GN_DEFINES+=" use_system_wayland=true "
 CHROMIUM_CORE_GN_DEFINES+=" use_xkbcommon=true "
 #CHROMIUM_CORE_GN_DEFINES+=" use_glib=false use_atk=false "
-#CHROMIUM_CORE_GN_DEFINES+=" use_gtk=false "
+CHROMIUM_CORE_GN_DEFINES+=" use_gtk=false use_qt=true "
 %if %{with system_icu}
 CHROMIUM_CORE_GN_DEFINES+=" use_system_icu=true "
 %else
@@ -408,7 +438,6 @@ CHROMIUM_CORE_GN_DEFINES+=" use_ozone=true "
 CHROMIUM_CORE_GN_DEFINES+=" enable_nacl=false "
 CHROMIUM_CORE_GN_DEFINES+=" proprietary_codecs=true "
 CHROMIUM_CORE_GN_DEFINES+=" ffmpeg_branding=\"ChromeOS\" "
-CHROMIUM_CORE_GN_DEFINES+=" enable_hevc_demuxing=true "
 CHROMIUM_CORE_GN_DEFINES+=" enable_mse_mpeg2ts_stream_parser=true "
 %ifarch %{ix86}
 CHROMIUM_CORE_GN_DEFINES+=" target_cpu=\"x86\""
@@ -423,6 +452,9 @@ CHROMIUM_CORE_GN_DEFINES+=" rtc_build_with_neon=true"
 %endif
 %ifarch %{aarch64}
 CHROMIUM_CORE_GN_DEFINES+=" target_cpu=\"arm64\""
+# if this is true (default for non official builds) it tries to use
+# a prebuilt x86 binary in the source tree
+CHROMIUM_CORE_GN_DEFINES+=" devtools_skip_typecheck=false"
 %endif
 CHROMIUM_CORE_GN_DEFINES+=" google_api_key=\"%{google_api_key}\""
 CHROMIUM_CORE_GN_DEFINES+=" google_default_client_id=\"%{google_default_client_id}\""
@@ -431,6 +463,7 @@ CHROMIUM_CORE_GN_DEFINES+=" thin_lto_enable_optimizations=true use_clang=true us
 CHROMIUM_CORE_GN_DEFINES+=" custom_toolchain=\"//build/toolchain/linux/unbundle:default\""
 CHROMIUM_CORE_GN_DEFINES+=" host_toolchain=\"//build/toolchain/linux/unbundle:default\""
 CHROMIUM_CORE_GN_DEFINES+=" v8_snapshot_toolchain=\"//build/toolchain/linux/unbundle:default\""
+CHROMIUM_CORE_GN_DEFINES+=" symbol_level=1"
 
 CHROMIUM_BROWSER_GN_DEFINES="use_pulseaudio=true link_pulseaudio=true"
 CHROMIUM_BROWSER_GN_DEFINES+=" enable_nacl=false"
@@ -444,6 +477,12 @@ CHROMIUM_BROWSER_GN_DEFINES+=" use_vaapi=true"
 if echo %{__cc} | grep -q clang; then
 	export CFLAGS="%{optflags} -Qunused-arguments -fPIE -fpie -fPIC"
 	export CXXFLAGS="%{optflags} -Qunused-arguments -fPIE -fpie -fPIC"
+	if echo %{optflags} |grep -qE -- '-O[sz]'; then
+		# FIXME this should get a real fix
+		# _Float32 acts up with -Os/-Oz [at compile time]
+		export CFLAGS="$CFLAGS -O2"
+		export CXXFLAGS="$CXXFLAGS -O2"
+	fi
 	_lto_cpus="$(getconf _NPROCESSORS_ONLN)"
 	if [ $_lto_cpus -gt 4 ]; then
 		# LTO is very memory intensive, so
@@ -462,11 +501,11 @@ fi
 export CC=%{__cc}
 export CXX=%{__cxx}
 
-python tools/gn/bootstrap/bootstrap.py --skip-generate-buildfiles
+%build_py tools/gn/bootstrap/bootstrap.py --skip-generate-buildfiles
 
-python third_party/libaddressinput/chromium/tools/update-strings.py
+%build_py third_party/libaddressinput/chromium/tools/update-strings.py
 
-out/Release/gn gen --script-executable=/usr/bin/python --args="${CHROMIUM_CORE_GN_DEFINES} ${CHROMIUM_BROWSER_GN_DEFINES}" out/Release
+out/Release/gn gen --script-executable=/usr/bin/%build_py --args="${CHROMIUM_CORE_GN_DEFINES} ${CHROMIUM_BROWSER_GN_DEFINES}" out/Release
 
 # Note: DON'T use system sqlite (3.7.3) -- it breaks history search
 # As of 36.0.1985.143, use_system_icu breaks the build.
