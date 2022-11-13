@@ -474,7 +474,7 @@ GN_DEFINES=""
 %if 0%{?ungoogled:1}
 GN_DEFINES+=" $(cat $UGDIR/flags.gn |tr '\n' ' ')"
 %endif
-GN_DEFINES+="use_sysroot=false is_debug=false fieldtrial_testing_like_official_build=true "
+GN_DEFINES+=" use_sysroot=false is_debug=false fieldtrial_testing_like_official_build=true "
 GN_DEFINES+=" is_clang=true clang_base_path=\"%{_prefix}\" clang_use_chrome_plugins=false "
 GN_DEFINES+=" treat_warnings_as_errors=false "
 %if 1
@@ -570,6 +570,8 @@ GN_DEFINES+=" perfetto_use_system_zlib=true"
 GN_DEFINES+=" rtc_link_pipewire=true rtc_use_pipewire=true"
 GN_DEFINES+=" use_libinput=true use_real_dbus_clients=true"
 GN_DEFINES+=" use_vaapi_image_codecs=true"
+# Introduces gtk dep as well as potential Google backdoors
+GN_DEFINES+=" enable_remoting=false"
 # 107: Build failure: GN_DEFINES+=" enable_wayland_server=true"
 # 107: Build failure: GN_DEFINES+=" perfetto_use_system_protobuf=true"
 # 107: Build failure: GN_DEFINES+=" use_v4l2_codec=true use_v4lplugin=true"
