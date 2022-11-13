@@ -560,7 +560,8 @@ GN_DEFINES+=" use_vaapi=true"
 GN_DEFINES+=" angle_link_glx=true angle_test_enable_system_egl=true "
 GN_DEFINES+=" enable_hevc_parser_and_hw_decoder=true enable_jxl_decoder=true"
 GN_DEFINES+=" enable_media_drm_storage=true"
-%ifarch %{x86_64}
+%ifarch znver1
+# Requires AVX, BMI2
 GN_DEFINES+=" enable_perfetto_x64_cpu_opt=true"
 %endif
 GN_DEFINES+=" enable_precompiled_headers=true"
