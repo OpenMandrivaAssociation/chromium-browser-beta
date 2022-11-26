@@ -66,7 +66,7 @@
 Name: 		chromium-browser-%{channel}
 # Working version numbers can be found at
 # http://omahaproxy.appspot.com/
-Version: 	108.0.5359.40
+Version: 	108.0.5359.48
 ### Don't be evil!!! ###
 #define ungoogled 107.0.5304.107-1
 %define stha 108-patchset-2
